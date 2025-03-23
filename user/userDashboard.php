@@ -16,6 +16,7 @@ mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $firstname, $lastname);
 mysqli_stmt_fetch($stmt);
+mysqli_stmt_close($stmt); // ✅ Close the statement here
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +38,7 @@ mysqli_stmt_fetch($stmt);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
+                        <a class="nav-link active" href="user_homepage.php">Home</a>
                         <a class="nav-link active" href="userDashboard.php">Dashboard</a>
                     </li>
                     
