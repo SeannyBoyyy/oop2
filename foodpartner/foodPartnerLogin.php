@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("All fields are required!");
     }
 
-    $sql = "SELECT partner_id, partner_firstname, partner_password, status, verification_status, subscription_status 
+    $sql = "SELECT partner_id, partner_firstname, partner_password, status, verification_status 
             FROM tbl_foodpartner WHERE partner_email = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $partner_email);
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_store_result($stmt);
 
     if (mysqli_stmt_num_rows($stmt) > 0) {
-        mysqli_stmt_bind_result($stmt, $partner_id, $partner_firstname, $db_password, $status, $verification_status, $subscription_status);
+        mysqli_stmt_bind_result($stmt, $partner_id, $partner_firstname, $db_password, $status, $verification_status);
         mysqli_stmt_fetch($stmt);
 
         if ($status === 'suspended') {
@@ -26,13 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else if ($verification_status === 'unverified') {
             echo "<div class='alert alert-warning text-center'>Please verify your email first.</div>";
         } else if (password_verify($partner_password, $db_password)) {
-            if ($subscription_status === 'expired' || is_null($subscription_status)) {
-                // 🚀 Redirect to subscription page if not subscribed
-                header("Location: paymongo_subscription.php?partner_email=" . urlencode($partner_email));
-                exit();
-            }
-
-            // ✅ Successful login with an active subscription
             $_SESSION['partner_id'] = $partner_id;
             $_SESSION['partner_name'] = $partner_firstname;
             $_SESSION['user_type'] = 'partner';
@@ -55,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partner Login | Food Business</title>
+    <title>Partner Login | Cinema</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -67,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <h4>Food Partner Login</h4>
                     </div>
                     <div class="card-body">
-                        <form action="foodpartnerLogin.php" method="POST">
+                        <form action="foodPartnerLogin.php" method="POST">
                             <div class="mb-3">
                                 <label for="partner_email" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="partner_email" required>

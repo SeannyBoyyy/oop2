@@ -72,15 +72,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                           $mayor_permit, $sanitary_permit);
     
     if (mysqli_stmt_execute($stmt)) {
-    // Redirect to subscription payment
-    // After successful registration, store the partner email in the session
-    $_SESSION['partner_email'] = $partner_email; // ✅ Set the session variable
-        header("Location: paymongo_subscription.php?email=" . urlencode($partner_email));
+        echo "<div class='alert alert-success text-center'>Food Partner account created successfully! Please wait for verification.</div>";
+        header("Location: foodPartnerLogin.php");
         exit();
     } else {
         echo "<div class='alert alert-danger text-center'>Error: " . mysqli_error($con) . "</div>";
     }
-                        
+
     mysqli_stmt_close($stmt);
 }
 ?>
