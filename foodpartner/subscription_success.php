@@ -46,7 +46,7 @@ $con->close();
                 
                 <hr>
 
-                <a href="foodPartnerDashboard.php" class="btn btn-primary mt-3">Return to Dashboard</a>
+                <a href="foodPartnerLogin.php" class="btn btn-primary mt-3">Return to Login</a>
             </div>
         </div>
     </div>

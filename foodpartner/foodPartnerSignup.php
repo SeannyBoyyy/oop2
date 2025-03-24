@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Redirect to subscription payment
     // After successful registration, store the partner email in the session
     $_SESSION['partner_email'] = $partner_email; // ✅ Set the session variable
-        header("Location: paymongo_subscription.php?email=" . urlencode($partner_email));
+        header("Location: paymongo_subscription.php?partner_email=" . urlencode($partner_email));
         exit();
     } else {
         echo "<div class='alert alert-danger text-center'>Error: " . mysqli_error($con) . "</div>";
