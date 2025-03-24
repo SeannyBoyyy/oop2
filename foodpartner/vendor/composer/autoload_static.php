@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964
+class ComposerStaticInit46cf108e4be17c351ffc73461823abf8
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -17,6 +17,7 @@ class ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964
         array (
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
+            'Paymongo\\' => 9,
         ),
         'G' => 
         array (
@@ -35,6 +36,10 @@ class ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964
         'Psr\\Http\\Client\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'Paymongo\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paymongo/paymongo-php/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -57,9 +62,9 @@ class ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4b55c7ef33235a0353c1b6b079f86964::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit46cf108e4be17c351ffc73461823abf8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit46cf108e4be17c351ffc73461823abf8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit46cf108e4be17c351ffc73461823abf8::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,5 +1,7 @@
 {
     "require": {
-        "guzzlehttp/guzzle": "^7.9"
+        "guzzlehttp/guzzle": "^7.9",
+        "paymongo/paymongo-php": "^0.0.0",
+        "ralouphie/getallheaders": "^3.0"
     }
 }

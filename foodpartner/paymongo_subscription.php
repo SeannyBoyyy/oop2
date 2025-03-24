@@ -38,7 +38,7 @@ try {
 
     $body = json_decode($response->getBody(), true);
     
-    // ✅ Extract the checkout URL
+    // ✅ Extract the checkout  URL
     if (isset($body['data']['attributes']['checkout_url'])) {
         $checkout_url = $body['data']['attributes']['checkout_url'];
 
