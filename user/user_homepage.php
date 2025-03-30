@@ -118,7 +118,31 @@ $resultCinemas = $con->query($sqlCinemas);
                 </div>
             <?php } ?>
         </div>
+
+        <h2 class="text-center my-4">Our Food Partners</h2>
+        <div class="row">
+            <?php
+            // Fetch active food partners along with their cinema name
+            $sqlFoodPartners = "SELECT f.*, c.name AS cinema_name 
+                                FROM tbl_foodpartner f 
+                                JOIN tbl_cinema c ON f.cinema_id = c.cinema_id 
+                                WHERE f.status = 'active' AND f.subscription_status = 'active'";
+            $resultFoodPartners = $con->query($sqlFoodPartners);
+
+            while ($partner = $resultFoodPartners->fetch_assoc()) { ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><?= htmlspecialchars($partner['business_name']); ?></h5>
+                            <p class="text-muted">Location: <?= htmlspecialchars($partner['cinema_name']); ?></p>
+                            <p>Contact: <?= htmlspecialchars($partner['partner_email']); ?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
     </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

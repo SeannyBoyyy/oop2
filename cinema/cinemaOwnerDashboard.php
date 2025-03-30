@@ -27,72 +27,82 @@ mysqli_stmt_close($stmt);
     <title>Cinema Owner Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/adminDashboard.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#"><?php echo htmlspecialchars($cinema_name); ?></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="cinemaOwnerDashboard.php">Dashboard</a>
+    <div class="wrapper">
+        <nav id="sidebar" class="cinema-sidebar">
+            <div class="position-sticky">
+                <div class="sidebar-header text-center">
+                    <i class="bi bi-person-circle display-1 mb-2"></i>
+                    <h3 class="fw-bold"><strong><?php echo htmlspecialchars($cinema_name); ?></strong></h3>
+                </div>
+                <ul class="list-unstyled components">
+                    <li class="active">
+                        <a href="cinemaOwnerDashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manage_movies.php">Manage Movies</a>
+                    <li>
+                        <a href="manage_movies.php"><i class="bi bi-film"></i> Manage Movies</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="manage_showtimes.php">Manage Showtime</a>
+                    <li>
+                        <a href="manage_showtimes.php"><i class="bi bi-ticket"></i> Manage Showtimes</a>
+                    </li>
+                    <li>
+                        <a href="manageCinemaProfile.php"><i class="bi bi-gear"></i> Settings</a>
+                    </li>
+                    <li>
+                        <a href="cinemaOwnerLogout.php" class="text-danger"><i class="bi bi-box-arrow-right"></i> Logout</a>
                     </li>
                 </ul>
-                <div class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="ownerDropdown" role="button" data-bs-toggle="dropdown">
-                            Welcome, <?php echo htmlspecialchars($firstname); ?>
+            </div>
+        </nav>
+        <div id="content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn">
+                        <i class="bi bi-list text-dark"></i>
+                    </button>
+                    <div class="ms-auto">
+                        <div class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="ownerDropdown" role="button" data-bs-toggle="dropdown">
+                                    Welcome, <?php echo htmlspecialchars($firstname); ?>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="container-fluid p-5">
+                <h2 class="text-start mb-5 fw-bold fs-1">Cinema Dashboard</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="manage_movies.php" class="card text-center text-decoration-none text-dark">
+                            <div class="card-body">
+                                <i class="bi bi-film display-1 mb-3"></i>
+                                <h5 class="card-title">Manage Movies</h5>
+                            </div>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-                        </ul>
-                    </li>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container mt-5">
-        <h3>Welcome, <?php echo htmlspecialchars($firstname) . " " . htmlspecialchars($lastname); ?>!</h3>
-        <p>This is your dashboard where you can manage movies, bookings, and cinema settings.</p>
-
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body text-center">
-                        <i class="bi bi-film fs-1 text-primary"></i>
-                        <h5 class="mt-2">Manage Movies</h5>
-                        <p>View and update your cinema's movie listings.</p>
-                        <a href="manage_movies.php" class="btn btn-primary btn-sm">Go to Movies</a>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body text-center">
-                        <i class="bi bi-ticket fs-1 text-success"></i>
-                        <h5 class="mt-2">Manage Showtime</h5>
-                        <p>View and manage Movies Showtime.</p>
-                        <a href="manage_showtimes.php" class="btn btn-success btn-sm">Go to Showtime</a>
+                    <div class="col-md-4">
+                        <a href="manage_showtimes.php" class="card text-center text-decoration-none text-dark">
+                            <div class="card-body">
+                                <i class="bi bi-ticket display-1 mb-3"></i>
+                                <h5 class="card-title">Manage Showtimes</h5>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body text-center">
-                        <i class="bi bi-gear fs-1 text-warning"></i>
-                        <h5 class="mt-2">Settings</h5>
-                        <p>Update your cinema details and preferences.</p>
-                        <a href="manageCinemaProfile.php" class="btn btn-warning btn-sm">Go to Settings</a>
+                    <div class="col-md-4">
+                        <a href="manageCinemaProfile.php" class="card text-center text-decoration-none text-dark">
+                            <div class="card-body">
+                                <i class="bi bi-gear display-1 mb-3"></i>
+                                <h5 class="card-title">Settings</h5>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
