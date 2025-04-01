@@ -53,7 +53,7 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
             <tr>
                 <td><?= htmlspecialchars($row['movie_title']) ?></td>
                 <td><?= htmlspecialchars($row['screen_number']) ?></td>
-                <td><?= htmlspecialchars($row['total_seats']) ?></td>
+                <td><!-- <?= htmlspecialchars($row['total_seats']) ?> --> <a href="manage_cinema.php" class="btn btn-success btn-sm">View</button> </td>
                 <td><?= htmlspecialchars($row['price']) ?></td>
                 <td><?= htmlspecialchars($row['show_date']) ?></td>
                 <td><?= htmlspecialchars($row['show_time']) ?></td>
