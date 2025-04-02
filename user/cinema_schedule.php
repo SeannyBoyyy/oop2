@@ -38,12 +38,11 @@ if (!$cinema) {
 }
 
 // Fetch movies and their showtimes for the selected cinema
-$sqlMovies = "SELECT m.*, s.show_date, s.show_time 
-              FROM tbl_movies m
-              JOIN tbl_showtimes s ON m.movie_id = s.movie_id
-              WHERE m.cinema_id = ? AND m.status = 'now showing' 
-              ORDER BY s.show_date ASC, s.show_time ASC";
-
+$sqlMovies = "SELECT s.showtime_id, m.title, m.poster_url, m.genre, m.rating, m.duration, s.show_date, s.show_time 
+                  FROM tbl_showtimes s
+                  JOIN tbl_movies m ON s.movie_id = m.movie_id
+                  WHERE s.cinema_id = ?
+                  ORDER BY s.show_date, s.show_time";
 $stmtMovies = $con->prepare($sqlMovies);
 $stmtMovies->bind_param("i", $cinema_id);
 $stmtMovies->execute();
@@ -81,13 +80,11 @@ $resultMovies = $stmtMovies->get_result();
                         <a class="nav-link active" href="user_homepage.php">Home</a>
                         <a class="nav-link active" href="userDashboard.php">Dashboard</a>
                     </li>
-                    
-             
                 </ul>
                 <div class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            Welcome, <?php echo htmlspecialchars($firstname); ?>
+                            Welcome, <?= htmlspecialchars($firstname); ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item text-danger" href="userLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
@@ -96,7 +93,7 @@ $resultMovies = $stmtMovies->get_result();
                 </div>
             </div>
         </div>
-    </nav>   
+    </nav>
 
     <div class="container my-4">
         <!-- Cinema Information -->
@@ -126,8 +123,7 @@ $resultMovies = $stmtMovies->get_result();
                                 <p>Duration: <?= htmlspecialchars($movie['duration']); ?> min</p>
                                 <p><strong>Show Date:</strong> <?= htmlspecialchars($movie['show_date']); ?></p>
                                 <p><strong>Show Time:</strong> <?= htmlspecialchars($movie['show_time']); ?></p>
-                                <a href="buy_ticket.php?movie_id=<?= $movie['movie_id']; ?>" class="btn btn-primary btn-custom">Buy</a>
-                                <a href="reserve_ticket.php?movie_id=<?= $movie['movie_id']; ?>" class="btn btn-secondary btn-custom">Reserve</a>
+                                <a href="select_showtime_click.php?showtime_id=<?= $movie['showtime_id'] ?>" class="btn btn-primary w-100">Buy Now</a>
                             </div>
                         </div>
                     </div>
