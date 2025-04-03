@@ -1,0 +1,60 @@
+.seat {
+  border: 1px solid #000;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+.seat:hover {
+  background-color: #ccc;
+}
+.bg-success {
+  background-color: green !important;
+  color: white;
+}
+.cinema-sidebar {
+  background-color: #343a40;
+  color: white;
+  min-height: 100vh;
+}
+.cinema-sidebar a {
+  color: white;
+  text-decoration: none;
+}
+.cinema-sidebar a:hover {
+  background-color: #495057;
+}
+.seat-layout-container {
+  overflow-x: auto;
+}
+.seat {
+  border: 1px solid #000;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #ddd;
+}
+.seat:hover {
+  background-color: #ccc;
+}
+.bg-success {
+  background-color: green !important;
+  color: white;
+}
+.btn-primary {
+  background-color: #ffd700;
+  border-color: #ffd700;
+  color: #000;
+}
+.btn-primary:hover {
+  background-color: #ffc800;
+  border-color: #ffc800;
+  color: #000;
+}

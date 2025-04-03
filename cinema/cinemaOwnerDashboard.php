@@ -2,13 +2,11 @@
 session_start();
 include '../config.php';
 
-// Check if cinema owner is logged in
 if (!isset($_SESSION['owner_id'])) {
     header("Location: cinemaOwnerLogin.php");
     exit();
 }
 
-// Get cinema owner information
 $owner_id = $_SESSION['owner_id'];
 $sql = "SELECT owner_firstname, owner_lastname, cinema_name FROM tbl_cinema_owner WHERE owner_id = ?";
 $stmt = mysqli_prepare($con, $sql);
@@ -39,19 +37,25 @@ mysqli_stmt_close($stmt);
                     <h3 class="fw-bold"><strong><?php echo htmlspecialchars($cinema_name); ?></strong></h3>
                 </div>
                 <ul class="list-unstyled components">
-                    <li class="active">
+                    <li class="active" style="font-size: 1.1rem;">
                         <a href="cinemaOwnerDashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
                     </li>
-                    <li>
+                    <li  style="font-size: 1.1rem;">
                         <a href="manage_movies.php"><i class="bi bi-film"></i> Manage Movies</a>
                     </li>
-                    <li>
+                    <li style="font-size: 1.1rem;">
                         <a href="manage_showtimes.php"><i class="bi bi-ticket"></i> Manage Showtimes</a>
                     </li>
-                    <li>
+                    <li style="font-size: 1.1rem;">
+                        <a href="select_showtime.php"><i class="bi bi-clock"></i> Showtimes</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
+                        <a href="manage_cinema.php"><i class="bi bi-building"></i> Manage Cinema</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
                         <a href="manageCinemaProfile.php"><i class="bi bi-gear"></i> Settings</a>
                     </li>
-                    <li>
+                    <li style="font-size: 1.1rem;">
                         <a href="cinemaOwnerLogout.php" class="text-danger"><i class="bi bi-box-arrow-right"></i> Logout</a>
                     </li>
                 </ul>
@@ -108,7 +112,14 @@ mysqli_stmt_close($stmt);
             </div>
         </div>
     </div>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('sidebarCollapse').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('content').classList.toggle('active');
+            });
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

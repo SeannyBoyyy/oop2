@@ -6,7 +6,7 @@ $user_id = $_GET['user_id'];
 $showtime_id = $_GET['showtime_id'];
 $seats = json_decode($_GET['seats'], true);
 
-// Check if user is logged in
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: userLogin.php");
     exit();
@@ -16,7 +16,7 @@ if (empty($user_id) || empty($showtime_id) || empty($seats)) {
     die('Error: Missing payment details.');
 }
 
-// Fetch user details
+
 $query = "SELECT user_firstname, user_lastname, user_email FROM tbl_user WHERE user_id = ?";
 $stmt = $con->prepare($query);
 $stmt->bind_param("i", $user_id);
@@ -27,7 +27,7 @@ $user_firstname = $user['user_firstname'];
 $user_lastname = $user['user_lastname'];
 $user_email = $user['user_email'];
 
-// Fetch movie & showtime details
+
 $query = "SELECT m.title, s.show_date, s.show_time, s.price 
           FROM tbl_showtimes s
           JOIN tbl_movies m ON s.movie_id = m.movie_id

@@ -2,7 +2,7 @@
 session_start();
 include '../config.php';
 
-// Check if user is logged in
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: userLogin.php");
     exit();
@@ -16,7 +16,7 @@ if (empty($showtime_id) || empty($selected_seats)) {
     exit;
 }
 
-// Fetch price per seat
+
 $query = "SELECT price FROM tbl_showtimes WHERE showtime_id = ?";
 $stmt = $con->prepare($query);
 $stmt->bind_param("i", $showtime_id);
@@ -25,7 +25,7 @@ $result = $stmt->get_result();
 $row = $result->fetch_assoc();
 
 $seat_price = $row['price'];
-$total_price = count($selected_seats) * $seat_price; // Multiply price per seat
+$total_price = count($selected_seats) * $seat_price; 
 
 echo json_encode(["status" => "success", "total_price" => $total_price]);
 ?>

@@ -84,27 +84,27 @@ if (!$selectedShowtime) {
             <!-- Movie & Cinema Details -->
             <div class="col-md-8">
                 <h4><?= htmlspecialchars($selectedShowtime['title']) ?></h4>
-                <p><strong>🎭 Genre:</strong> <?= htmlspecialchars($selectedShowtime['genre']) ?></p>
-                <p><strong>⭐ Rating:</strong> <?= htmlspecialchars($selectedShowtime['rating']) ?></p>
-                <p><strong>⏳ Duration:</strong> <?= htmlspecialchars($selectedShowtime['duration']) ?> minutes</p>
-                <p><strong>📅 Release Date:</strong> <?= htmlspecialchars($selectedShowtime['release_date']) ?></p>
+                <p><strong> Genre:</strong> <?= htmlspecialchars($selectedShowtime['genre']) ?></p>
+                <p><strong> Rating:</strong> <?= htmlspecialchars($selectedShowtime['rating']) ?></p>
+                <p><strong> Duration:</strong> <?= htmlspecialchars($selectedShowtime['duration']) ?> minutes</p>
+                <p><strong> Release Date:</strong> <?= htmlspecialchars($selectedShowtime['release_date']) ?></p>
                 <hr>
-                <h5>📍 Cinema: <?= htmlspecialchars($selectedShowtime['cinema_name']) ?></h5>
-                <p><strong>📌 Location:</strong> <?= htmlspecialchars($selectedShowtime['cinema_location']) ?></p>
-                <p><strong>🔹 Status:</strong> <?= $selectedShowtime['cinema_status'] == 'open' ? '🟢 Open' : '🔴 Closed' ?></p>
+                <h5>Cinema: <?= htmlspecialchars($selectedShowtime['cinema_name']) ?></h5>
+                <p><strong> Location:</strong> <?= htmlspecialchars($selectedShowtime['cinema_location']) ?></p>
+                <p><strong> Status:</strong> <?= $selectedShowtime['cinema_status'] == 'open' ? '🟢 Open' : '🔴 Closed' ?></p>
             </div>
         </div>
     </div>
 
     <!-- Showtime Details -->
     <div class="card p-3 mt-3">
-        <h4>🎥 Showtime Details</h4>
-        <p><strong>🎬 Movie:</strong> <?= htmlspecialchars($selectedShowtime['title']) ?></p>
-        <p><strong>📅 Date:</strong> <?= htmlspecialchars($selectedShowtime['show_date']) ?></p>
-        <p><strong>⏰ Time:</strong> <?= date("h:i A", strtotime($selectedShowtime['show_time'])) ?></p>
-        <p><strong>🎭 Screen Number:</strong> <?= htmlspecialchars($selectedShowtime['screen_number']) ?></p>
-        <p><strong>💺 Total Seats:</strong> <?= htmlspecialchars($selectedShowtime['total_seats']) ?></p>
-        <p><strong>💲 Ticket Price:</strong> ₱<?= number_format($selectedShowtime['price'], 2) ?></p>
+        <h4>Showtime Details</h4>
+        <p><strong> Movie:</strong> <?= htmlspecialchars($selectedShowtime['title']) ?></p>
+        <p><strong> Date:</strong> <?= htmlspecialchars($selectedShowtime['show_date']) ?></p>
+        <p><strong> Time:</strong> <?= date("h:i A", strtotime($selectedShowtime['show_time'])) ?></p>
+        <p><strong> Screen Number:</strong> <?= htmlspecialchars($selectedShowtime['screen_number']) ?></p>
+        <p><strong> Total Seats:</strong> <?= htmlspecialchars($selectedShowtime['total_seats']) ?></p>
+        <p><strong> Ticket Price:</strong> ₱<?= number_format($selectedShowtime['price'], 2) ?></p>
     </div>
 
     <!-- Seat Selection -->

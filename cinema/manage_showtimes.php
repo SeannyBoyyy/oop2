@@ -2,13 +2,24 @@
 session_start();
 include '../config.php';
 
-// Check if cinema owner is logged in
 if (!isset($_SESSION['owner_id'])) {
     header("Location: cinemaOwnerLogin.php");
     exit();
 }
 
 $cinema_id = $_SESSION['cinema_id'];
+
+$cinema_name = '';
+$query = "SELECT name FROM tbl_cinema WHERE cinema_id = ?";
+$stmt = mysqli_prepare($con, $query);
+mysqli_stmt_bind_param($stmt, "i", $cinema_id);
+mysqli_stmt_execute($stmt);
+$result_cinema = mysqli_stmt_get_result($stmt);
+if ($row = mysqli_fetch_assoc($result_cinema)) {
+    $cinema_name = $row['name'];
+}
+
+
 
 $sql = "SELECT s.showtime_id, m.movie_id, m.title AS movie_title, 
                s.screen_number, s.total_seats, s.price, s.show_date, s.show_time 
@@ -20,7 +31,6 @@ mysqli_stmt_bind_param($stmt, "i", $cinema_id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-// Fetch movies for dropdown
 $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinema_id = '$cinema_id'");
 ?>
 
@@ -30,63 +40,128 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Showtimes</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/adminDashboard.css" rel="stylesheet">
+    <link href="../css/cinemaManageMovies.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-4">
-    <h2>Manage Showtimes</h2>
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addShowtimeModal">Add Showtime</button>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Movie</th>
-                <th>Screen</th>
-                <th>Total Seats</th>
-                <th>Price</th>
-                <th>Show Date</th>
-                <th>Show Time</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-            <tr>
-                <td><?= htmlspecialchars($row['movie_title']) ?></td>
-                <td><?= htmlspecialchars($row['screen_number']) ?></td>
-                <td><!-- <?= htmlspecialchars($row['total_seats']) ?> --> <a href="manage_cinema.php" class="btn btn-success btn-sm">View</button> </td>
-                <td><?= htmlspecialchars($row['price']) ?></td>
-                <td><?= htmlspecialchars($row['show_date']) ?></td>
-                <td><?= htmlspecialchars($row['show_time']) ?></td>
-                <td>
-                <button class="btn btn-warning btn-sm editBtn"
-                    data-id="<?= $row['showtime_id'] ?>"
-                    data-movie-id="<?= $row['movie_id'] ?>"
-                    data-screen="<?= $row['screen_number'] ?>"
-                    data-seats="<?= $row['total_seats'] ?>"
-                    data-price="<?= $row['price'] ?>"
-                    data-date="<?= $row['show_date'] ?>"
-                    data-time="<?= $row['show_time'] ?>"
-                    data-bs-toggle="modal" data-bs-target="#editShowtimeModal">
-                    Edit
-                </button>
+<div class="wrapper">
+    <nav id="sidebar" class="cinema-sidebar">
+        <div class="position-sticky">
+            <div class="sidebar-header text-center">
+                <i class="bi bi-person-circle display-1 mb-2"></i>
+                <h3 class="fw-bold"><strong><?php echo htmlspecialchars($cinema_name); ?></strong></h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li style="font-size: 1.1rem;">
+                    <a href="cinemaOwnerDashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                </li>
+                <li style="font-size: 1.1rem;">
+                    <a href="manage_movies.php"><i class="bi bi-film"></i> Manage Movies</a>
+                </li>
+                <li class="active" style="font-size: 1.1rem;">
+                    <a href="manage_showtimes.php"><i class="bi bi-ticket"></i> Manage Showtimes</a>
+                </li>
+                <li style="font-size: 1.1rem;">
+                    <a href="select_showtime.php"><i class="bi bi-clock"></i> Showtimes</a>
+                </li>
+                <li style="font-size: 1.1rem;">
+                    <a href="manage_cinema.php"><i class="bi bi-building"></i> Manage Cinema</a>
+                </li>
+                <li style="font-size: 1.1rem;">
+                    <a href="manageCinemaProfile.php"><i class="bi bi-gear"></i> Settings</a>
+                </li>
+                <li style="font-size: 1.1rem;">
+                    <a href="cinemaOwnerLogout.php" class="text-danger"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-                    <button class="btn btn-danger btn-sm deleteBtn"
-                        data-id="<?= $row['showtime_id'] ?>"
-                        data-bs-toggle="modal" data-bs-target="#deleteShowtimeModal">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-        <?php } ?>
-        </tbody>
-    </table>
+    <div id="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn">
+                    <i class="bi bi-list text-dark"></i>
+                </button>
+                <div class="ms-auto">
+                    <div class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                                Welcome, <?php echo isset($_SESSION['owner_name']) ? htmlspecialchars($_SESSION['owner_name']) : 'Guest'; ?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php">
+                                    <i class="bi bi-box-arrow-right"></i> Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid p-5">
+            <h2 class="text-start mb-5 fw-bold fs-1">Manage Showtimes</h2>
+            <button class="btn mb-3" data-bs-toggle="modal" data-bs-target="#addShowtimeModal" style="background-color: #ffd700">Add Showtime</button>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Movie</th>
+                        <th>Screen</th>
+                        <th>Total Seats</th>
+                        <th>Price</th>
+                        <th>Show Date</th>
+                        <th>Show Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['movie_title']) ?></td>
+                        <td><?= htmlspecialchars($row['screen_number']) ?></td>
+                        <td><!-- <?= htmlspecialchars($row['total_seats']) ?> --> <a href="manage_cinema.php" class="btn btn-success btn-sm">View</a></td>
+                        <td><?= htmlspecialchars($row['price']) ?></td>
+                        <td><?= htmlspecialchars($row['show_date']) ?></td>
+                        <td><?= htmlspecialchars($row['show_time']) ?></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm editBtn"
+                                data-id="<?= $row['showtime_id'] ?>"
+                                data-movie-id="<?= $row['movie_id'] ?>"
+                                data-screen="<?= $row['screen_number'] ?>"
+                                data-seats="<?= $row['total_seats'] ?>"
+                                data-price="<?= $row['price'] ?>"
+                                data-date="<?= $row['show_date'] ?>"
+                                data-time="<?= $row['show_time'] ?>"
+                                data-bs-toggle="modal" data-bs-target="#editShowtimeModal">
+                                Edit
+                            </button>
+
+                            <button class="btn btn-danger btn-sm deleteBtn"
+                                data-id="<?= $row['showtime_id'] ?>"
+                                data-bs-toggle="modal" data-bs-target="#deleteShowtimeModal">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Add Showtime Modal -->
 <div class="modal fade" id="addShowtimeModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header"><h5 class="modal-title">Add Showtime</h5></div>
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title">Add Showtime</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
             <div class="modal-body">
                 <form action="process_showtime.php" method="POST">
                     <select name="movie_id" class="form-control mb-2" required>
@@ -112,7 +187,10 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
 <div class="modal fade" id="deleteShowtimeModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header"><h5 class="modal-title">Delete Showtime</h5></div>
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title">Delete Showtime</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
             <div class="modal-body">
                 <p>Are you sure you want to delete this showtime?</p>
                 <form action="process_showtime.php" method="POST">
@@ -128,9 +206,9 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
 <div class="modal fade" id="editShowtimeModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-warning">
                 <h5 class="modal-title">Edit Showtime</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form action="process_showtime.php" method="POST">
@@ -197,7 +275,14 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
     });
 </script>
 
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('sidebarCollapse').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('content').classList.toggle('active');
+            });
+        });
+    </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

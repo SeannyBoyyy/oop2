@@ -60,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/adminSignup.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
     <div class="container">
@@ -77,28 +78,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="mb-4">
                                 <label class="form-label" style="letter-spacing: 2px;">First Name</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-person-fill"  style="color: black;"></i></span>
                                     <input type="text" name="admin_firstname" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" style="letter-spacing: 2px;">Last Name</label>
+                                <label class="form-label" style="letter-spacing: 2px;" >Last Name</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-person-fill"  style="color: black;"></i></span>
                                     <input type="text" name="admin_lastname" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" style="letter-spacing: 2px;">Email</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-envelope-fill"  style="color: black;"></i></span>
                                     <input type="email" name="admin_email" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-5">
                                 <label class="form-label" style="letter-spacing: 2px;">Password</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-lock-fill"  style="color: black;"></i></span>
                                     <input type="password" name="admin_password" class="form-control" required>
                                 </div>
                             </div>

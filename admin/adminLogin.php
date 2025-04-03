@@ -47,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Admin Login | Cinema</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/adminLogin.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 </head>
@@ -55,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row justify-content-center mt-5">
             <div class="col-md-6 col-lg-4">
                 <div class="text-center mb-4">
-                    <i class="bi bi-person-circle mb-3" style="color: #ffc107; font-size: 5rem;"></i>
+                    <i class="fas fa-user-shield fa-3x mb-3" style="color: #ffc107; font-size: 5rem;"></i>
                     <h4 class="fs-1 fw-bold">Admin Login</h4>
                     <p class="text-muted"  style="letter-spacing: 1px;">Please enter your email and password to login.</p>
                 </div>
@@ -65,14 +66,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="mb-4">
                                 <label for="admin_email" class="form-label " style="letter-spacing: 2px;">Email</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-envelope-fill"  style="color: black;"></i></span>
                                     <input type="email" class="form-control" name="admin_email" required>
                                 </div>
                             </div>
                             <div class="mb-5">
                                 <label for="admin_password" class="form-label"  style="letter-spacing: 2px;">Password</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-lock-fill"  style="color: black;"></i></span>
                                     <input type="password" class="form-control" name="admin_password" required>
                                 </div>
                             </div>

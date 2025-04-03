@@ -13,11 +13,14 @@ $success_message = "";
 $error_message = "";
 
 // Fetch cinema details
-$sql = "SELECT cinema_id, name, location, total_screens, status, cinema_image FROM tbl_cinema WHERE owner_id = ?";
+$sql = "SELECT c.cinema_id, c.name, c.location, c.total_screens, c.status, c.cinema_image, o.owner_firstname, o.owner_lastname 
+        FROM tbl_cinema c
+        JOIN tbl_cinema_owner o ON c.owner_id = o.owner_id
+        WHERE c.owner_id = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "i", $owner_id);
 mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $cinema_id, $name, $location, $total_screens, $status, $cinema_image);
+mysqli_stmt_bind_result($stmt, $cinema_id, $name, $location, $total_screens, $status, $cinema_image, $owner_firstname, $owner_lastname);
 mysqli_stmt_fetch($stmt);
 mysqli_stmt_close($stmt);
 
@@ -75,6 +78,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Cinema Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/adminDashboard.css" rel="stylesheet">
     <style>
         .profile-img {
             max-width: 150px;
@@ -85,63 +91,111 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="cinemaOwnerDashboard.php">Cinema Dashboard</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="manageCinemaProfile.php">Manage Cinema</a>
+<div class="wrapper">
+        <nav id="sidebar" class="cinema-sidebar">
+            <div class="position-sticky">
+                <div class="sidebar-header text-center">
+                    <i class="bi bi-person-circle display-1 mb-2"></i>
+                    <h3 class="fw-bold"><strong><?php echo htmlspecialchars($name); ?></strong></h3>
+                </div>
+                <ul class="list-unstyled components">
+                    <li style="font-size: 1.1rem;">
+                        <a href="cinemaOwnerDashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
+                        <a href="manage_movies.php"><i class="bi bi-film"></i> Manage Movies</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
+                        <a href="manage_showtimes.php"><i class="bi bi-ticket"></i> Manage Showtimes</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
+                        <a href="select_showtime.php"><i class="bi bi-clock"></i> Showtimes</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
+                        <a href="manage_cinema.php"><i class="bi bi-building"></i> Manage Cinema</a>
+                    </li>
+                    <li class="active" style="font-size: 1.1rem;">
+                        <a href="manageCinemaProfile.php"><i class="bi bi-gear"></i> Settings</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
+                        <a href="cinemaOwnerLogout.php" class="text-danger"><i class="bi bi-box-arrow-right"></i> Logout</a>
                     </li>
                 </ul>
-                <a href="cinemaOwnerLogout.php" class="btn btn-danger">Logout</a>
+            </div>
+        </nav>
+
+        <div id="content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn">
+                        <i class="bi bi-list text-dark"></i>
+                    </button>
+                    <div class="ms-auto">
+                        <div class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="ownerDropdown" role="button" data-bs-toggle="dropdown">
+                                      Welcome, <?php echo htmlspecialchars($owner_firstname . ' ' . $owner_lastname); ?>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-5">
+                <h2 class="text-start mb-5 fw-bold fs-1">Manage Cinema Profile</h2>
+
+                <?php if ($success_message): ?>
+                    <div class="alert alert-success"><?php echo $success_message; ?></div>
+                <?php endif; ?>
+                <?php if ($error_message): ?>
+                    <div class="alert alert-danger"><?php echo $error_message; ?></div>
+                <?php endif; ?>
+
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Cinema Name</label>
+                        <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <textarea class="form-control" name="location" required><?php echo htmlspecialchars($location); ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Total Screens</label>
+                        <input type="number" class="form-control" name="total_screens" value="<?php echo $total_screens; ?>" required min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" name="status">
+                            <option value="open" <?php if ($status == 'open') echo "selected"; ?>>Open</option>
+                            <option value="closed" <?php if ($status == 'closed') echo "selected"; ?>>Closed</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cinema Profile Image</label>
+                        <?php if (!empty($cinema_image)): ?>
+                            <img src="<?php echo htmlspecialchars($cinema_image); ?>" class="profile-img mb-2">
+                        <?php endif; ?>
+                        <input type="file" class="form-control" name="cinema_image" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn " style="background-color: #ffd700">Update Profile</button>
+                </form>
             </div>
         </div>
-    </nav>
-
-    <div class="container mt-4">
-        <h3>Manage Cinema Profile</h3>
-
-        <?php if ($success_message): ?>
-            <div class="alert alert-success"><?php echo $success_message; ?></div>
-        <?php endif; ?>
-        <?php if ($error_message): ?>
-            <div class="alert alert-danger"><?php echo $error_message; ?></div>
-        <?php endif; ?>
-
-        <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label">Cinema Name</label>
-                <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Location</label>
-                <textarea class="form-control" name="location" required><?php echo htmlspecialchars($location); ?></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Total Screens</label>
-                <input type="number" class="form-control" name="total_screens" value="<?php echo $total_screens; ?>" required min="1">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Status</label>
-                <select class="form-control" name="status">
-                    <option value="open" <?php if ($status == 'open') echo "selected"; ?>>Open</option>
-                    <option value="closed" <?php if ($status == 'closed') echo "selected"; ?>>Closed</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Cinema Profile Image</label>
-                <?php if (!empty($cinema_image)): ?>
-                    <img src="<?php echo htmlspecialchars($cinema_image); ?>" class="profile-img mb-2">
-                <?php endif; ?>
-                <input type="file" class="form-control" name="cinema_image" accept="image/*">
-            </div>
-            <button type="submit" class="btn btn-primary">Update Profile</button>
-        </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('sidebarCollapse').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('content').classList.toggle('active');
+            });
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

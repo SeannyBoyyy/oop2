@@ -1,0 +1,59 @@
+/* Custom styles for modal headers */
+.modal-header.bg-primary {
+  background-color: #ffd700 !important;
+  color: #000 !important;
+}
+
+.modal-header.bg-warning {
+  background-color: #ffc800 !important;
+  color: #000 !important;
+}
+
+.modal-header.bg-danger {
+  background-color: #ff4d4d !important;
+  color: #fff !important;
+}
+
+/* Custom button styles */
+.btn-primary {
+  background-color: #ffd700;
+  border-color: #ffd700;
+  color: #000;
+}
+
+.btn-primary:hover {
+  background-color: #ffc800;
+  border-color: #ffc800;
+  color: #000;
+}
+
+.btn-warning {
+  background-color: #ffc800;
+  border-color: #ffc800;
+  color: #000;
+}
+
+.btn-warning:hover {
+  background-color: #ffb700;
+  border-color: #ffb700;
+  color: #000;
+}
+
+.btn-danger {
+  background-color: #ff4d4d;
+  border-color: #ff4d4d;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #ff3333;
+  border-color: #ff3333;
+  color: #fff;
+}
+
+/* Custom input focus styles */
+.form-control:focus,
+.form-select:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.5);
+}

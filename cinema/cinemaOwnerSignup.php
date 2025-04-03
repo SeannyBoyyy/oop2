@@ -83,58 +83,99 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cinema Owner Sign-Up</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/adminSignup.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
     <div class="container">
         <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h4>Cinema Owner Sign-Up</h4>
-                    </div>
+            <div class="col-md-8">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-tie fa-3x mb-3" style="color: #ffc107; font-size: 5rem;"></i>
+                    <h4 class="fs-1 fw-bold">Cinema Owner Sign-Up</h4>
+                    <p class="text-muted" style="letter-spacing: 1px;">Please fill in the form below to create a cinema owner account.</p>
+                </div>
+                <div class="card shadow" style="padding: 20px;">
                     <div class="card-body">
                         <form action="cinemaOwnerSignup.php" method="POST" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label>First Name</label>
-                                <input type="text" name="owner_firstname" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Last Name</label>
-                                <input type="text" name="owner_lastname" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input type="email" name="owner_email" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Password</label>
-                                <input type="password" name="owner_password" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Business Address</label>
-                                <textarea name="owner_address" class="form-control" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label>Cinema Name</label>
-                                <input type="text" name="cinema_name" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>DTI Permit</label>
-                                <input type="file" name="dti_permit" class="form-control" accept="image/*" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Mayor's Permit</label>
-                                <input type="file" name="mayor_permit" class="form-control" accept="image/*" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Sanitary Permit</label>
-                                <input type="file" name="sanitary_permit" class="form-control" accept="image/*" required>
+                            <div class="row">
+                                <!-- First Name -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">First Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-person-fill"  style="color: black;"></i></span>
+                                        <input type="text" name="owner_firstname" class="form-control" required>
+                                    </div>
+                                </div>
+                                <!-- Last Name -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">Last Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-person-fill"  style="color: black;"></i></span>
+                                        <input type="text" name="owner_lastname" class="form-control" required>
+                                    </div>
+                                </div>
+                                <!-- Email -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;" >Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-envelope-fill"  style="color: black;"></i></span>
+                                        <input type="email" name="owner_email" class="form-control" required>
+                                    </div>
+                                </div>
+                                <!-- Password -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-lock-fill"  style="color: black;"></i></span>
+                                        <input type="password" name="owner_password" class="form-control" required>
+                                    </div>
+                                </div>
+                                <!-- Business Address -->
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">Business Address</label>
+                                    <textarea name="owner_address" class="form-control" required></textarea>
+                                </div>
+                                <!-- Cinema Name -->
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">Cinema Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-building-fill"  style="color: black;"></i></span>
+                                        <input type="text" name="cinema_name" class="form-control" required>
+                                    </div>
+                                </div>
+                                <!-- DTI Permit -->
+                                <div class="col-md-4 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">DTI Permit</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-file-earmark-text-fill"  style="color: black;"></i></span>
+                                        <input type="file" name="dti_permit" class="form-control" accept="image/*" required>
+                                    </div>
+                                </div>
+                                <!-- Mayor's Permit -->
+                                <div class="col-md-4 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">Mayor's Permit</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-file-earmark-text-fill"  style="color: black;"></i></span>
+                                        <input type="file" name="mayor_permit" class="form-control" accept="image/*" required>
+                                    </div>
+                                </div>
+                                <!-- Sanitary Permit -->
+                                <div class="col-md-4 mb-4">
+                                    <label class="form-label" style="letter-spacing: 2px;">Sanitary Permit</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-file-earmark-text-fill"  style="color: black;"></i></span>
+                                        <input type="file" name="sanitary_permit" class="form-control" accept="image/*" required>
+                                    </div>
+                                </div>
                             </div>
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Sign Up</button>
+                                <button type="submit" class="btn btn-primary text-black" style="letter-spacing: 2px; padding: 10px 20px;">Sign Up</button>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="cinemaOwnerLogin.php">Already have an account? Login here</a>
+                                <a href="cinemaOwnerLogin.php" style="color: blue;">Already have an account? Login here</a>
                             </div>
                         </form>
                     </div>
@@ -145,3 +186,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

@@ -118,3 +118,13 @@
 .card-body i {
   color: var(--text-dark);
 }
+.btn-primary {
+  background-color: #ffd700;
+  border-color: #ffd700;
+  color: #000;
+}
+.btn-primary:hover {
+  background-color: #ffc800;
+  border-color: #ffc800;
+  color: #000;
+}

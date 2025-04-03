@@ -1,14 +1,14 @@
 <?php
 session_start();
-require '../config.php'; // Include your database connection
+require '../config.php';
 
-// Check if user is logged in
+
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
     header("Location: userLogin.php");
     exit();
 }
 
-// Get user information
+
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT user_firstname, user_lastname FROM tbl_user WHERE user_id = ?";
 $stmt = mysqli_prepare($con, $sql);
@@ -16,16 +16,16 @@ mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $firstname, $lastname);
 mysqli_stmt_fetch($stmt);
-mysqli_stmt_close($stmt); // ✅ Close the statement here
+mysqli_stmt_close($stmt); // 
 
-// Get the selected cinema ID from the URL
+
 if (!isset($_GET['cinema_id'])) {
     die("Invalid request. Cinema not found.");
 }
 
 $cinema_id = intval($_GET['cinema_id']);
 
-// Fetch cinema details
+
 $sqlCinema = "SELECT * FROM tbl_cinema WHERE cinema_id = ?";
 $stmt = $con->prepare($sqlCinema);
 $stmt->bind_param("i", $cinema_id);
@@ -37,7 +37,7 @@ if (!$cinema) {
     die("Cinema not found.");
 }
 
-// Fetch movies and their showtimes for the selected cinema
+
 $sqlMovies = "SELECT s.showtime_id, m.title, m.poster_url, m.genre, m.rating, m.duration, s.show_date, s.show_time 
                   FROM tbl_showtimes s
                   JOIN tbl_movies m ON s.movie_id = m.movie_id
@@ -78,7 +78,6 @@ $resultMovies = $stmtMovies->get_result();
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="user_homepage.php">Home</a>
-                        <a class="nav-link active" href="userDashboard.php">Dashboard</a>
                     </li>
                 </ul>
                 <div class="navbar-nav">
@@ -96,7 +95,6 @@ $resultMovies = $stmtMovies->get_result();
     </nav>
 
     <div class="container my-4">
-        <!-- Cinema Information -->
         <div class="card mb-4">
             <div class="card-body">
                 <h2 class="card-title"><?= htmlspecialchars($cinema['name']); ?></h2>
