@@ -123,7 +123,7 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
                     <tr>
                         <td><?= htmlspecialchars($row['movie_title']) ?></td>
                         <td><?= htmlspecialchars($row['screen_number']) ?></td>
-                        <td><!-- <?= htmlspecialchars($row['total_seats']) ?> --> <a href="manage_cinema.php" class="btn btn-success btn-sm">View</a></td>
+                        <td><!-- <?= htmlspecialchars($row['total_seats']) ?> --> <a href="manage_cinema.php?showtime_id=<?= htmlspecialchars($row['showtime_id']) ?>" class="btn btn-success btn-sm">View</a></td>
                         <td><?= htmlspecialchars($row['price']) ?></td>
                         <td><?= htmlspecialchars($row['show_date']) ?></td>
                         <td><?= htmlspecialchars($row['show_time']) ?></td>
@@ -140,11 +140,12 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
                                 Edit
                             </button>
 
-                            <button class="btn btn-danger btn-sm deleteBtn"
-                                data-id="<?= $row['showtime_id'] ?>"
-                                data-bs-toggle="modal" data-bs-target="#deleteShowtimeModal">
+                            <!-- Delete Button -->
+                            <a href="process_showtime.php?delete=<?= $row['showtime_id'] ?>" 
+                            onclick="return confirm('Are you sure you want to delete this showtime?')"
+                            class="btn btn-danger btn-sm">
                                 Delete
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>
@@ -177,25 +178,6 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
                     <input type="date" name="show_date" class="form-control mb-2" required>
                     <input type="time" name="show_time" class="form-control mb-2" required>
                     <button type="submit" name="add_showtime" class="btn btn-primary w-100">Add Showtime</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Showtime Modal -->
-<div class="modal fade" id="deleteShowtimeModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger">
-                <h5 class="modal-title">Delete Showtime</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this showtime?</p>
-                <form action="process_showtime.php" method="POST">
-                    <input type="hidden" name="showtime_id" id="delete_showtime_id">
-                    <button type="submit" name="delete_showtime" class="btn btn-danger w-100">Delete</button>
                 </form>
             </div>
         </div>

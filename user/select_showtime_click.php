@@ -105,13 +105,40 @@ if (!$selectedShowtime) {
         <p><strong> Screen Number:</strong> <?= htmlspecialchars($selectedShowtime['screen_number']) ?></p>
         <p><strong> Total Seats:</strong> <?= htmlspecialchars($selectedShowtime['total_seats']) ?></p>
         <p><strong> Ticket Price:</strong> ₱<?= number_format($selectedShowtime['price'], 2) ?></p>
+
+        <?php
+        // Set default timezone to match the server's timezone or the timezone of your application
+        date_default_timezone_set('Asia/Manila'); // Adjust if needed
+
+        // Get the current date and time
+        $now = new DateTime();
+
+        // Calculate the showtime end date
+        $showStart = new DateTime($selectedShowtime['show_date'] . ' ' . $selectedShowtime['show_time']);
+        $showEnd = clone $showStart;
+        $showEnd->modify('+' . $selectedShowtime['duration'] . ' minutes');  // Add duration to show start
+
+        // Check if the movie is finished
+        $isFinished = $now > $showEnd;
+        ?>
+        <!-- Display if the movie is finished -->
+        <?php if ($isFinished): ?>
+            <p class="text-danger">🎬 This movie has finished showing.</p>
+        <?php else: ?>
+            <p class="text-success">🎬 The movie is still showing.</p>
+        <?php endif; ?>
     </div>
 
     <!-- Seat Selection -->
     <div id="seatSelection" class="mt-4">
         <h4>🎟 Select Your Seat</h4>
         <div id="seatLayout"></div>
-        <button id="payNow" class="btn btn-primary mt-3" style="display:none;">Pay Now</button>
+        <!-- Display if the movie is finished -->
+        <?php if ($isFinished): ?>
+            <button class="btn btn-secondary btn-sm" disabled title="Available only during the or Before movie.">⏳ The movie is Finished</button>
+        <?php else: ?>
+            <button id="payNow" class="btn btn-primary mt-3" style="display:none;">Pay Now</button>
+        <?php endif; ?>
     </div>
 </div>
 

@@ -10,6 +10,7 @@ if (!isset($_SESSION['owner_id']) && $_SESSION['cinema_id']) {
 
 if (isset($_POST['cinema_id'])) {
     $cinema_id = $_POST['cinema_id'];
+    $selected_showtime = isset($_GET['showtime_id']) ? $_GET['showtime_id'] : ''; // Get showtime_id from URL
 
     $query = "SELECT * FROM tbl_showtimes WHERE cinema_id = ?";
     $stmt = $con->prepare($query);
@@ -19,7 +20,8 @@ if (isset($_POST['cinema_id'])) {
 
     echo '<option value="">Choose a showtime</option>';
     while ($row = $result->fetch_assoc()) {
-        echo '<option value="' . $row['showtime_id'] . '">Screen ' . $row['screen_number'] . ' - ' . $row['show_date'] . ' ' . $row['show_time'] . '</option>';
+        $isSelected = ($selected_showtime == $row['showtime_id']) ? "selected" : "";
+        echo '<option value="' . $row['showtime_id'] . '" ' . $isSelected . '>Screen ' . $row['screen_number'] . ' - ' . $row['show_date'] . ' ' . $row['show_time'] . '</option>';
     }
 }
 ?>

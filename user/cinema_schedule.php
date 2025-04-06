@@ -2,8 +2,8 @@
 session_start();
 require '../config.php';
 
-
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
     header("Location: userLogin.php");
     exit();
 }
@@ -47,6 +47,13 @@ $stmtMovies = $con->prepare($sqlMovies);
 $stmtMovies->bind_param("i", $cinema_id);
 $stmtMovies->execute();
 $resultMovies = $stmtMovies->get_result();
+
+
+$sqlFoodPartners = "SELECT * FROM tbl_foodpartner WHERE cinema_id = ? AND status = 'active'";
+$stmtFoodPartners = $con->prepare($sqlFoodPartners);
+$stmtFoodPartners->bind_param("i", $cinema_id);
+$stmtFoodPartners->execute();
+$resultFoodPartners = $stmtFoodPartners->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -128,6 +135,30 @@ $resultMovies = $stmtMovies->get_result();
                 <?php }
             } else { ?>
                 <p class="text-center text-muted">No movies available at this cinema.</p>
+            <?php } ?>
+        </div>
+    </div>
+
+    <div class="container my-4">
+        <h3 class="mt-4">Food Partners</h3>
+        <div class="row">
+            <?php if ($resultFoodPartners->num_rows > 0) { ?>
+                <?php while ($partner = $resultFoodPartners->fetch_assoc()) { ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="../foodpartner/uploads/foodpartner_profiles/<?= htmlspecialchars($partner['image_url']); ?>" class="card-img-top movie-poster">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($partner['business_name']); ?></h5>
+                                <p class="text-muted"><?= htmlspecialchars($partner['partner_address']); ?></p>
+                                <p><strong>Owner:</strong> <?= htmlspecialchars($partner['partner_firstname'] . " " . $partner['partner_lastname']); ?></p>
+                                <p><strong>Email:</strong> <?= htmlspecialchars($partner['partner_email']); ?></p>
+                                <a href="view_foodproducts.php?partner_id=<?= $partner['partner_id']; ?>&cinema_id=<?= $cinema_id; ?>" class="btn btn-primary w-100">View Products</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            <?php } else { ?>
+                <p class="text-center text-muted">No food partners available for this cinema.</p>
             <?php } ?>
         </div>
     </div>

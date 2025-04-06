@@ -61,18 +61,22 @@ if (isset($_POST['edit_showtime'])) {
 }
 
 // Delete Showtime
-if (isset($_POST['delete_showtime'])) {
-    $showtime_id = $_POST['showtime_id'];
-    $cinema_id = $_SESSION['cinema_id']; // Ensure owner only deletes their showtimes
+if (isset($_GET['delete'])) {
+    $delete_id = intval($_GET['delete']);
 
-    $delete_sql = "DELETE FROM tbl_showtimes WHERE showtime_id = '$showtime_id' AND cinema_id = '$cinema_id'";
+    // Optional: delete related seat records if needed
+    mysqli_query($con, "DELETE FROM tbl_seats WHERE showtime_id = $delete_id");
 
-    if (mysqli_query($con, $delete_sql)) {
-        $_SESSION['success'] = "Showtime deleted successfully!";
+    $delete_query = "DELETE FROM tbl_showtimes WHERE showtime_id = ?";
+    $stmt = $con->prepare($delete_query);
+    $stmt->bind_param("i", $delete_id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Showtime deleted successfully.'); window.location.href='manage_showtimes.php';</script>";
+        exit();
     } else {
-        $_SESSION['error'] = "Failed to delete showtime.";
+        echo "<script>alert('Failed to delete showtime.');</script>";
     }
-    header("Location: manage_showtimes.php");
-    exit;
 }
+
 ?>

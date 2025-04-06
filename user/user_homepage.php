@@ -140,6 +140,7 @@ $resultCinemas = $con->query($sqlCinemas);
                 while ($partner = $resultFoodPartners->fetch_assoc()) { ?>
                     <div class="carousel-item <?= $isActive ? 'active' : ''; ?>">
                         <div class="card">
+                        <img src="../foodpartner/uploads/foodpartner_profiles/<?= $partner['image_url']?>" class="card-img-top" style="height: 300px; object-fit: cover;">
                             <div class="card-body text-center">
                                 <h5 class="card-title"><?= htmlspecialchars($partner['business_name']); ?></h5>
                                 <p class="text-muted">Location: <?= htmlspecialchars($partner['cinema_name']); ?></p>
@@ -161,6 +162,7 @@ $resultCinemas = $con->query($sqlCinemas);
             while ($partner = $resultFoodPartners->fetch_assoc()) { ?>
                 <div class="col-md-4 mb-4">
                     <div class="card">
+                    <img src="../foodpartner/uploads/foodpartner_profiles/<?= htmlspecialchars($partner['image_url']); ?>" class="card-img-top movie-poster">
                         <div class="card-body text-center">
                             <h5 class="card-title"><?= htmlspecialchars($partner['business_name']); ?></h5>
                             <p class="text-muted">Location: <?= htmlspecialchars($partner['cinema_name']); ?></p>

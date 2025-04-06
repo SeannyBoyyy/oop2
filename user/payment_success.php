@@ -142,7 +142,19 @@ $stmt->execute();
         <p><strong>🎬 Enjoy your movie!</strong></p>
         <button class="btn btn-primary print-button" onclick="window.print()">🖨 Print Receipt</button>
     </div>
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <!-- View Tickets Button -->
+        <a href="user_tickets.php" class="btn btn-primary">
+            View Tickets
+        </a>
+
+        <!-- Order Food Button -->
+        <a href="order_food.php?showtime_id=<?= $showtime_id ?>" class="btn btn-success">
+            Order Food
+        </a>
+    </div>
 </div>
+
 
 </body>
 </html>

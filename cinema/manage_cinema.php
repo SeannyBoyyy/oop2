@@ -8,9 +8,14 @@ if (!isset($_SESSION['owner_id']) && $_SESSION['cinema_id']) {
     exit();
 }
 
-// Fetch cinemas
-$cinemaQuery = "SELECT * FROM tbl_cinema";
-$cinemaResult = mysqli_query($con, $cinemaQuery);
+$cinema_id = $_SESSION['cinema_id']; // Get cinema ID from session
+
+// Fetch only the logged-in owner's cinema
+$cinemaQuery = "SELECT * FROM tbl_cinema WHERE cinema_id = ?";
+$stmt = $con->prepare($cinemaQuery);
+$stmt->bind_param("i", $cinema_id);
+$stmt->execute();
+$cinemaResult = $stmt->get_result();
 
 // Fetch the cinema name based on the logged-in cinema owner
 $owner_id = $_SESSION['owner_id']; // Assuming the owner ID is stored in the session
@@ -102,11 +107,12 @@ $stmt->close();
                 <h2 class="text-start mb-5 fw-bold fs-1">Cinema Seat Configuration</h2>
                     <form id="seatForm">
                         <div class="mb-3">
-                            <label for="cinema" class="form-label">Select Cinema</label>
-                            <select id="cinema" name="cinema_id" class="form-select" required>
-                                <option value="">Choose a cinema</option>
-                                <?php while ($row = mysqli_fetch_assoc($cinemaResult)): ?>
-                                    <option value="<?= $row['cinema_id'] ?>"><?= $row['name'] ?></option>
+                            <label for="cinema" class="form-label">Selected Cinema</label>
+                            <select id="cinema" name="cinema_id" class="form-select" required readonly>
+                                <?php while ($row = $cinemaResult->fetch_assoc()): ?>
+                                    <option value="<?= htmlspecialchars($row['cinema_id']) ?>" selected>
+                                        <?= htmlspecialchars($row['name']) ?>
+                                    </option>
                                 <?php endwhile; ?>
                             </select>
                         </div>
@@ -141,24 +147,48 @@ $stmt->close();
    
 
 <script>
-// Fetch showtimes based on selected cinema
+// Fetch showtimes based on logged-in cinema
 $(document).ready(function () {
-    $("#cinema").change(function () {
-        var cinemaId = $(this).val();
-        if (cinemaId) {
+    var cinemaId = $("#cinema").val();
+    var urlParams = new URLSearchParams(window.location.search);
+    var showtimeId = urlParams.get("showtime_id"); // Get showtime_id from URL
+
+    if (cinemaId) {
+        $.ajax({
+            url: "fetch_showtimes.php",
+            method: "POST",
+            data: { cinema_id: cinemaId },
+            success: function (data) {
+                $("#showtime").html(data);
+
+                // Automatically select the showtime if available
+                if (showtimeId) {
+                    $("#showtime").val(showtimeId).change();
+                }
+            }
+        });
+    }
+
+    // Fetch seats when selecting a showtime
+    $("#showtime").change(function () {
+        var selectedShowtimeId = $(this).val();
+        if (selectedShowtimeId) {
             $.ajax({
-                url: "fetch_showtimes.php",
+                url: "fetch_seats.php",
                 method: "POST",
-                data: { cinema_id: cinemaId },
-                success: function (data) {
-                    $("#showtime").html(data);
+                data: { showtime_id: selectedShowtimeId },
+                success: function (response) {
+                    $("#seatLayout").html(response);
+                    $("#saveSeats").show();
                 }
             });
         } else {
-            $("#showtime").html('<option value="">Select a cinema first</option>');
+            $("#seatLayout").html(""); // Clear seat layout if no showtime selected
+            $("#saveSeats").hide();
         }
     });
 });
+
 
 function generateSeats() {
     let rows = parseInt(document.getElementById('rows').value);
