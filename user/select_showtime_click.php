@@ -8,6 +8,15 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT user_firstname, user_lastname FROM tbl_user WHERE user_id = ?";
+$stmt = mysqli_prepare($con, $sql);
+mysqli_stmt_bind_param($stmt, "i", $user_id);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_bind_result($stmt, $firstname, $lastname);
+mysqli_stmt_fetch($stmt);
+mysqli_stmt_close($stmt); // 
+
 // Get showtime_id from the URL
 $selectedShowtimeId = isset($_GET['showtime_id']) ? intval($_GET['showtime_id']) : 0;
 
@@ -42,6 +51,8 @@ if (!$selectedShowtime) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Your Seat</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/userHomepage.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .movie-poster {
@@ -69,9 +80,54 @@ if (!$selectedShowtime) {
         }
     </style>
 </head>
-<body class="p-4">
+<body>
+    <nav class="navbar navbar-expand-lg shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-warning" href="user_homepage.php">
+                Cinema App
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'userDashboard.php' ? 'active text-warning' : '' ?>" href="userDashboard.php">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_tickets.php' ? 'active text-warning' : '' ?>" href="user_tickets.php">My Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_orders.php' ? 'active text-warning' : '' ?>" href="user_orders.php">My Orders</a>
+                    </li>
+                </ul>
 
-<div class="container">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                             Welcome, <strong><?php echo htmlspecialchars($firstname); ?></strong>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item text-danger" href="userLogout.php">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<div class="container mt-4">
+    <button onclick="history.back()" class="btn btn-secondary">Back to Cinema</button>
+</div>
+
+
+<div class="container py-4">
+    
     <h3 class="mb-3">🎬 Movie & Showtime Details</h3>
 
     <!-- Movie & Cinema Info -->

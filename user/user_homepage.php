@@ -41,28 +41,42 @@ $resultCinemas = $con->query($sqlCinemas);
     <link href="../css/userHomepage.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg shadow-sm py-3">
         <div class="container">
-            <a class="navbar-brand" href="#">Cinema App</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand fw-bold text-warning" href="user_homepage.php">
+                Cinema App
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+            
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="user_homepage.php">Home</a>
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'userDashboard.php' ? 'active text-warning' : '' ?>" href="userDashboard.php">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_tickets.php' ? 'active text-warning' : '' ?>" href="user_tickets.php">My Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_orders.php' ? 'active text-warning' : '' ?>" href="user_orders.php">My Orders</a>
                     </li>
                 </ul>
-                <div class="navbar-nav">
+
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            Welcome, <?php echo htmlspecialchars($firstname); ?>
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                             Welcome, <strong><?php echo htmlspecialchars($firstname); ?></strong>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item text-danger" href="userLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="userLogout.php">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                </div>
+                </ul>
             </div>
         </div>
     </nav>
@@ -73,7 +87,7 @@ $resultCinemas = $con->query($sqlCinemas);
         <div id="nowShowingCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <?php
-                $sqlMovies = "SELECT m.*, c.name AS cinema_name FROM tbl_movies m 
+                $sqlMovies = "SELECT m.*,  c.cinema_id, c.name AS cinema_name FROM tbl_movies m 
                             JOIN tbl_cinema c ON m.cinema_id = c.cinema_id 
                             WHERE m.status = 'now showing'";
                 $resultMovies = $con->query($sqlMovies);
@@ -93,8 +107,8 @@ $resultCinemas = $con->query($sqlCinemas);
                             <p>Duration: <?= htmlspecialchars($movie['duration']); ?> min</p>
                             <p><small>Showing at: <strong><?= htmlspecialchars($movie['cinema_name']); ?></strong></small></p>
                             <div class="d-grid gap-2">
-                                <a href="buy_ticket.php?movie_id=<?= $movie['movie_id']; ?>" class="btn btn-custom btn-yellow">Buy</a>
-                                <a href="reserve_ticket.php?movie_id=<?= $movie['movie_id']; ?>" class="btn btn-secondary btn-custom btn-yellow-outline">Reserve</a>
+                                <a href="cinema_schedule.php?cinema_id=<?= $movie['cinema_id']; ?>" class="btn btn-custom btn-yellow">Buy</a>
+                                <a href="cinema_schedule.php?cinema_id=<?= $movie['cinema_id']; ?>" class="btn btn-secondary btn-custom btn-yellow-outline">Reserve</a>
                             </div>
                         </div>
                     </div>

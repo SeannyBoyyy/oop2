@@ -8,6 +8,15 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT user_firstname, user_lastname FROM tbl_user WHERE user_id = ?";
+$stmt = mysqli_prepare($con, $sql);
+mysqli_stmt_bind_param($stmt, "i", $user_id);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_bind_result($stmt, $firstname, $lastname);
+mysqli_stmt_fetch($stmt);
+mysqli_stmt_close($stmt); // 
+
 if (!isset($_GET['partner_id']) || !isset($_GET['cinema_id'])) {
     die("Invalid request. Partner or Cinema not found.");
 }
@@ -43,6 +52,8 @@ $resultProducts = $stmtProducts->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($partner['business_name']); ?> - Food Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/userHomepage.css" rel="stylesheet">
     <style>
         .product-img {
             width: 100%;
@@ -58,6 +69,46 @@ $resultProducts = $stmtProducts->get_result();
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-warning" href="user_homepage.php">
+                Cinema App
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'userDashboard.php' ? 'active text-warning' : '' ?>" href="userDashboard.php">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_tickets.php' ? 'active text-warning' : '' ?>" href="user_tickets.php">My Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_orders.php' ? 'active text-warning' : '' ?>" href="user_orders.php">My Orders</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                             Welcome, <strong><?php echo htmlspecialchars($firstname); ?></strong>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item text-danger" href="userLogout.php">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container my-4">
         <a href="cinema_schedule.php?cinema_id=<?= $cinema_id; ?>" class="btn btn-secondary mb-3">Back to Cinema</a>
         

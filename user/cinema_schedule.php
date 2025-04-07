@@ -63,6 +63,8 @@ $resultFoodPartners = $stmtFoodPartners->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($cinema['name']); ?> - Movie Schedule</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/userHomepage.css" rel="stylesheet">
     <style>
         .movie-poster {
             width: 100%;
@@ -75,28 +77,42 @@ $resultFoodPartners = $stmtFoodPartners->get_result();
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg shadow-sm py-3">
         <div class="container">
-            <a class="navbar-brand" href="#">Cinema App</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand fw-bold text-warning" href="user_homepage.php">
+                Cinema App
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+            
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="user_homepage.php">Home</a>
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'userDashboard.php' ? 'active text-warning' : '' ?>" href="userDashboard.php">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_tickets.php' ? 'active text-warning' : '' ?>" href="user_tickets.php">My Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_orders.php' ? 'active text-warning' : '' ?>" href="user_orders.php">My Orders</a>
                     </li>
                 </ul>
-                <div class="navbar-nav">
+
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            Welcome, <?= htmlspecialchars($firstname); ?>
+                             Welcome, <strong><?php echo htmlspecialchars($firstname); ?></strong>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item text-danger" href="userLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="userLogout.php">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                </div>
+                </ul>
             </div>
         </div>
     </nav>
@@ -128,7 +144,7 @@ $resultFoodPartners = $stmtFoodPartners->get_result();
                                 <p>Duration: <?= htmlspecialchars($movie['duration']); ?> min</p>
                                 <p><strong>Show Date:</strong> <?= htmlspecialchars($movie['show_date']); ?></p>
                                 <p><strong>Show Time:</strong> <?= htmlspecialchars($movie['show_time']); ?></p>
-                                <a href="select_showtime_click.php?showtime_id=<?= $movie['showtime_id'] ?>" class="btn btn-primary w-100">Buy Now</a>
+                                <a href="select_showtime_click.php?showtime_id=<?= $movie['showtime_id'] ?>" class="btn btn-secondary btn-custom btn-yellow-outlinew-100">Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -152,7 +168,7 @@ $resultFoodPartners = $stmtFoodPartners->get_result();
                                 <p class="text-muted"><?= htmlspecialchars($partner['partner_address']); ?></p>
                                 <p><strong>Owner:</strong> <?= htmlspecialchars($partner['partner_firstname'] . " " . $partner['partner_lastname']); ?></p>
                                 <p><strong>Email:</strong> <?= htmlspecialchars($partner['partner_email']); ?></p>
-                                <a href="view_foodproducts.php?partner_id=<?= $partner['partner_id']; ?>&cinema_id=<?= $cinema_id; ?>" class="btn btn-primary w-100">View Products</a>
+                                <a href="view_foodproducts.php?partner_id=<?= $partner['partner_id']; ?>&cinema_id=<?= $cinema_id; ?>" class="btn btn-secondary btn-custom btn-yellow-outline w-100">View Products</a>
                             </div>
                         </div>
                     </div>
