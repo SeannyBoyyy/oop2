@@ -51,6 +51,7 @@ if (!$selectedShowtime) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Your Seat</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/userHomepage.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -81,122 +82,196 @@ if (!$selectedShowtime) {
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg shadow-sm py-3">
+<?php include '../include/userNav.php'; ?>  
+
+<div class="py-5" style="margin-top: -20px; background-color: #121212;">
+    <!-- Hero Section with Cinematic Background -->
+    <div class="hero-section text-light" 
+         style="background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('../cinema/<?= htmlspecialchars($selectedShowtime['poster_url']) ?>'); 
+                background-size: cover; background-position: center; padding: 80px 0; margin-bottom: 40px; 
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);">
         <div class="container">
-            <a class="navbar-brand fw-bold text-warning" href="user_homepage.php">
-                Cinema App
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="mb-4 text-start">
+                <button onclick="history.back()" class="btn btn-warning px-4 py-2 rounded-pill fw-bold shadow-sm">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Cinema
+                </button>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-md-12 text-center mb-4">
+                    <img src="../cinema/<?= htmlspecialchars($selectedShowtime['poster_url']) ?>" 
+                         alt="<?= htmlspecialchars($selectedShowtime['title']) ?>" 
+                         class="img-fluid rounded-lg shadow-lg" 
+                         style="max-height: 400px; object-fit: cover; border: 4px solid rgba(255,255,255,0.1); transform: rotate(-2deg);">
+                </div>
+                <div class="col-lg-7 col-md-12 mb-4 mb-lg-0 text-center text-lg-start ps-lg-5">
+                    <div class="mb-3">
+                        <span class="badge bg-danger px-3 py-2 rounded-pill fw-bold">NOW SHOWING</span>
+                    </div>
+                    <h1 class="display-3 fw-bold mb-3" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
+                        <?= htmlspecialchars($selectedShowtime['title']) ?>
+                    </h1>
+                    <p class="lead mb-4 opacity-75 fs-4"><?= htmlspecialchars($selectedShowtime['genre']) ?></p>
+                    
+                    <div class="d-flex gap-3 mb-4 flex-wrap justify-content-center justify-content-lg-start">
+                        <div class="badge bg-light text-dark p-3 px-4 fs-6 rounded-pill">
+                            <i class="bi bi-star-fill text-warning me-2"></i><?= htmlspecialchars($selectedShowtime['rating']) ?>
+                        </div>
+                        <div class="badge bg-light text-dark p-3 px-4 fs-6 rounded-pill">
+                            <i class="bi bi-clock me-2"></i><?= htmlspecialchars($selectedShowtime['duration']) ?> min
+                        </div>
+                        <div class="badge bg-light text-dark p-3 px-4 fs-6 rounded-pill">
+                            <i class="bi bi-calendar-event me-2"></i><?= htmlspecialchars($selectedShowtime['release_date']) ?>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="badge <?= $selectedShowtime['cinema_status'] == 'open' ? 'bg-success' : 'bg-danger'; ?> p-3 px-4 fs-6 rounded-3">
+                            <i class="bi bi-building me-2"></i><?= htmlspecialchars($selectedShowtime['cinema_name']) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Showtime and Seat Selection -->
+    <div class="container">
+        <div class="row g-4">
+            <!-- Showtime Details Card -->
+            <div class="col-lg-4 col-md-5">
+                <div class="card border-0 rounded-lg shadow-lg h-100" style="background: rgba(40, 40, 40, 0.9);">
+                    <div class="card-header bg-dark text-white py-3 border-0">
+                        <h4 class="mb-0"><i class="bi bi-info-circle-fill me-2"></i>Showtime Details</h4>
+                    </div>
+                    <div class="card-body text-white">
+                        <div class="mb-3 p-3 rounded" style="background: rgba(0,0,0,0.2);">
+                            <p class="mb-1  small">MOVIE</p>
+                            <p class="fs-5 fw-bold mb-0"><?= htmlspecialchars($selectedShowtime['title']) ?></p>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="text-center p-3 rounded flex-grow-1 me-2" style="background: rgba(0,0,0,0.2);">
+                                <p class="mb-1small">DATE</p>
+                                <p class="fs-6 fw-bold mb-0"><?= date("M d, Y", strtotime($selectedShowtime['show_date'])) ?></p>
+                            </div>
+                            <div class="text-center p-3 rounded flex-grow-1" style="background: rgba(0,0,0,0.2);">
+                                <p class="mb-1 text-muted small">TIME</p>
+                                <p class="fs-6 fw-bold mb-0"><?= date("h:i A", strtotime($selectedShowtime['show_time'])) ?></p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="text-center p-3 rounded flex-grow-1 me-2" style="background: rgba(0,0,0,0.2);">
+                                <p class="mb-1 small">SCREEN</p>
+                                <p class="fs-6 fw-bold mb-0"><?= htmlspecialchars($selectedShowtime['screen_number']) ?></p>
+                            </div>
+                            <div class="text-center p-3 rounded flex-grow-1" style="background: rgba(0,0,0,0.2);">
+                                <p class="mb-1 small">SEATS</p>
+                                <p class="fs-6 fw-bold mb-0"><?= htmlspecialchars($selectedShowtime['total_seats']) ?></p>
+                            </div>
+                        </div>
+                        
+                        <div class="p-3 rounded mb-3" style="background: rgba(0,0,0,0.2);">
+                            <p class="mb-1 small">TICKET PRICE</p>
+                            <p class="fs-4 fw-bold mb-0 text-warning">₱<?= number_format($selectedShowtime['price'], 2) ?></p>
+                        </div>
+
+                        <?php
+                        date_default_timezone_set('Asia/Manila'); 
+                        $now = new DateTime();
+                        $showStart = new DateTime($selectedShowtime['show_date'] . ' ' . $selectedShowtime['show_time']);
+                        $showEnd = clone $showStart;
+                        $showEnd->modify('+' . $selectedShowtime['duration'] . ' minutes');
+                        $isFinished = $now > $showEnd;
+                        ?>
+                        
+                        <div class="mt-3 p-3 rounded text-center <?= $isFinished ? 'bg-danger bg-opacity-25' : 'bg-success bg-opacity-25' ?>">
+                            <?php if ($isFinished): ?>
+                                <p class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>This movie has finished showing.</p>
+                            <?php else: ?>
+                                <p class="mb-0"><i class="bi bi-film me-2"></i>The movie is still showing.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'userDashboard.php' ? 'active text-warning' : '' ?>" href="userDashboard.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_tickets.php' ? 'active text-warning' : '' ?>" href="user_tickets.php">My Tickets</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_orders.php' ? 'active text-warning' : '' ?>" href="user_orders.php">My Orders</a>
-                    </li>
-                </ul>
-
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                             Welcome, <strong><?php echo htmlspecialchars($firstname); ?></strong>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item text-danger" href="userLogout.php">
-                                    <i class="bi bi-box-arrow-right"></i> Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-<div class="container mt-4">
-    <button onclick="history.back()" class="btn btn-secondary">Back to Cinema</button>
-</div>
-
-
-<div class="container py-4">
-    
-    <h3 class="mb-3">🎬 Movie & Showtime Details</h3>
-
-    <!-- Movie & Cinema Info -->
-    <div class="card p-3">
-        <div class="row">
-            <!-- Movie Poster -->
-            <div class="col-md-4">
-                <img src="../cinema/<?= htmlspecialchars($selectedShowtime['poster_url']) ?>" class="movie-poster" alt="Movie Poster">
-            </div>
-            <!-- Movie & Cinema Details -->
-            <div class="col-md-8">
-                <h4><?= htmlspecialchars($selectedShowtime['title']) ?></h4>
-                <p><strong> Genre:</strong> <?= htmlspecialchars($selectedShowtime['genre']) ?></p>
-                <p><strong> Rating:</strong> <?= htmlspecialchars($selectedShowtime['rating']) ?></p>
-                <p><strong> Duration:</strong> <?= htmlspecialchars($selectedShowtime['duration']) ?> minutes</p>
-                <p><strong> Release Date:</strong> <?= htmlspecialchars($selectedShowtime['release_date']) ?></p>
-                <hr>
-                <h5>Cinema: <?= htmlspecialchars($selectedShowtime['cinema_name']) ?></h5>
-                <p><strong> Location:</strong> <?= htmlspecialchars($selectedShowtime['cinema_location']) ?></p>
-                <p><strong> Status:</strong> <?= $selectedShowtime['cinema_status'] == 'open' ? '🟢 Open' : '🔴 Closed' ?></p>
+            <!-- Seat Selection Card -->
+            <div class="col-lg-8 col-md-7">
+                <div class="card border-0 rounded-lg shadow-lg h-100" style="background: rgba(40, 40, 40, 0.9);">
+                    <div class="card-header bg-dark text-white py-3 border-0">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                            <h4 class="mb-2 mb-sm-0"><i class="bi bi-ticket-perforated-fill me-2"></i>Select Your Seat</h4>
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">
+                                    <span class="badge p-2 rounded" style="background-color: #ddd;"></span> Available
+                                </span>
+                                <span>
+                                    <span class="badge p-2 rounded bg-success"></span> Selected
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body text-white">
+                        <div class="text-center mb-4 p-2 p-md-3 bg-dark bg-opacity-50 rounded">
+                            <div class="py-2 px-3 px-md-5 bg-secondary bg-opacity-25 rounded-pill d-inline-block mb-4">
+                                SCREEN
+                            </div>
+                            <div id="seatLayout" class="mt-4 overflow-auto" style="max-width: 100%"></div>
+                        </div>
+                        
+                        <?php if ($isFinished): ?>
+                            <div class="text-center mt-4">
+                                <button class="btn btn-secondary btn-lg px-4 py-2 py-md-3 rounded-pill fw-bold" disabled>
+                                    <i class="bi bi-clock-history me-2"></i>The movie has ended
+                                </button>
+                            </div>
+                        <?php else: ?>
+                            <div class="text-center mt-4">
+                                <button id="payNow" class="btn btn-warning btn-lg px-4 px-md-5 py-2 py-md-3 rounded-pill fw-bold shadow" style="display:none;">
+                                    <i class="bi bi-credit-card-fill me-2"></i>Proceed to Payment
+                                </button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Showtime Details -->
-    <div class="card p-3 mt-3">
-        <h4>Showtime Details</h4>
-        <p><strong> Movie:</strong> <?= htmlspecialchars($selectedShowtime['title']) ?></p>
-        <p><strong> Date:</strong> <?= htmlspecialchars($selectedShowtime['show_date']) ?></p>
-        <p><strong> Time:</strong> <?= date("h:i A", strtotime($selectedShowtime['show_time'])) ?></p>
-        <p><strong> Screen Number:</strong> <?= htmlspecialchars($selectedShowtime['screen_number']) ?></p>
-        <p><strong> Total Seats:</strong> <?= htmlspecialchars($selectedShowtime['total_seats']) ?></p>
-        <p><strong> Ticket Price:</strong> ₱<?= number_format($selectedShowtime['price'], 2) ?></p>
-
-        <?php
-        // Set default timezone to match the server's timezone or the timezone of your application
-        date_default_timezone_set('Asia/Manila'); // Adjust if needed
-
-        // Get the current date and time
-        $now = new DateTime();
-
-        // Calculate the showtime end date
-        $showStart = new DateTime($selectedShowtime['show_date'] . ' ' . $selectedShowtime['show_time']);
-        $showEnd = clone $showStart;
-        $showEnd->modify('+' . $selectedShowtime['duration'] . ' minutes');  // Add duration to show start
-
-        // Check if the movie is finished
-        $isFinished = $now > $showEnd;
-        ?>
-        <!-- Display if the movie is finished -->
-        <?php if ($isFinished): ?>
-            <p class="text-danger">🎬 This movie has finished showing.</p>
-        <?php else: ?>
-            <p class="text-success">🎬 The movie is still showing.</p>
-        <?php endif; ?>
-    </div>
-
-    <!-- Seat Selection -->
-    <div id="seatSelection" class="mt-4">
-        <h4>🎟 Select Your Seat</h4>
-        <div id="seatLayout"></div>
-        <!-- Display if the movie is finished -->
-        <?php if ($isFinished): ?>
-            <button class="btn btn-secondary btn-sm" disabled title="Available only during the or Before movie.">⏳ The movie is Finished</button>
-        <?php else: ?>
-            <button id="payNow" class="btn btn-primary mt-3" style="display:none;">Pay Now</button>
-        <?php endif; ?>
-    </div>
 </div>
+
+<style>
+    /* Custom styles for better seat appearance */
+    .seat {
+        border: 2px solid #555;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #ddd;
+        display: inline-block;
+        margin: 5px;
+        border-radius: 8px;
+        font-weight: bold;
+        line-height: 36px;
+        transition: all 0.2s ease;
+        color: #333;
+    }
+    .seat:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(255,215,0,0.7);
+    }
+    .seat.bg-success {
+        background-color: #28a745 !important;
+        color: white;
+        border-color: #218838;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.7);
+    }
+    .disabled-seat {
+        background-color: #6c757d;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+</style>
 
 <script>
 $(document).ready(function () {
@@ -213,7 +288,7 @@ $(document).ready(function () {
         });
     }
 
-    loadSeats(); // Load seats automatically
+    loadSeats(); 
 
     $(document).on("click", ".seat", function () {
         $(this).toggleClass("bg-success");
@@ -235,11 +310,27 @@ $(document).ready(function () {
             return;
         }
 
-        // Redirect to PayMongo Payment Page
+
         window.location.href = "paymongo_payment.php?showtime_id=" + showtimeId + "&seats=" + JSON.stringify(selectedSeats);
     });
 });
 </script>
-
+    <style>
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
+        
+        .navbar-nav .nav-link.active {
+            color: #ffd700 !important;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #ffd700 !important;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
