@@ -56,7 +56,7 @@ $stmt->close();
                 <h3 class="fw-bold"><strong><?= htmlspecialchars($cinema_name); ?></strong></h3>
             </div>
             <ul class="list-unstyled components">
-                <li class="active" style="font-size: 1.1rem;">
+                <li  style="font-size: 1.1rem;">
                     <a href="cinemaOwnerDashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
                 </li>
                 <li style="font-size: 1.1rem;">
@@ -68,7 +68,7 @@ $stmt->close();
                 <li style="font-size: 1.1rem;">
                     <a href="select_showtime.php"><i class="bi bi-clock"></i> Showtimes</a>
                 </li>
-                <li style="font-size: 1.1rem;">
+                <li class="active" style="font-size: 1.1rem;">
                     <a href="manage_cinema.php"><i class="bi bi-building"></i> Manage Cinema</a>
                 </li>
                 <li style="font-size: 1.1rem;">
@@ -91,7 +91,7 @@ $stmt->close();
                         <div class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
-                                    Welcome, <?php echo isset($_SESSION['owner_name']) ? htmlspecialchars($_SESSION['owner_name']) : 'Guest'; ?>
+                                    Welcome, <?php echo htmlspecialchars($cinema_name); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item text-danger" href="adminLogout.php">
@@ -260,7 +260,14 @@ function saveSeatLayout() {
 
 
 </script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('sidebarCollapse').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('content').classList.toggle('active');
+            });
+    });
+</script>
 
 
 </body>

@@ -14,9 +14,6 @@
                         <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_homepage.php' ? 'active fw-bold text-warning' : 'text-white' ?>" href="user_homepage.php">Home</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'userDashboard.php' ? 'active fw-bold text-warning' : 'text-white' ?>" href="userDashboard.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item mx-2">
                         <a class="nav-link <?= basename($_SERVER['PHP_SELF']) == 'user_tickets.php' ? 'active fw-bold text-warning' : 'text-white' ?>" href="user_tickets.php">My Tickets</a>
                     </li>
                     <li class="nav-item mx-2">

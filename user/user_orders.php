@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Get user information
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT user_firstname, user_lastname FROM tbl_user WHERE user_id = ?";
 $stmt = mysqli_prepare($con, $sql);
@@ -16,7 +15,7 @@ mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $firstname, $lastname);
 mysqli_stmt_fetch($stmt);
-mysqli_stmt_close($stmt); // ✅ Close the statement here
+mysqli_stmt_close($stmt); // 
 
 $user_id = $_SESSION['user_id'];
 
@@ -44,7 +43,6 @@ $result = $stmt->get_result();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/adminDashboard.css" rel="stylesheet">
     <style>
@@ -61,56 +59,11 @@ $result = $stmt->get_result();
 </head>
 <body>
 <div class="wrapper">
-    <!-- Sidebar -->
-    <nav id="sidebar">
-        <div class="sidebar-header text-center">
-            <i class="bi bi-person-circle display-1 mb-2"></i>
-            <h3 class="fw-bold"><strong>User Dashboard</strong></h3>
-        </div>
-        <ul class="list-unstyled components">
-            <li style="font-size: 1.2em;">
-                <a href="userDashboard.php"><i class="bi bi-house-door"></i> Dashboard</a>
-            </li>
-            <li class="active" style="font-size: 1.2em;">
-                <a href="user_tickets.php"><i class="bi bi-ticket-perforated"></i> My Tickets</a>
-            </li>
-            <li style="font-size: 1.2em;">
-                <a href="user_orders.php"><i class="bi bi-cart"></i> My Orders</a>
-            </li>
-            <li style="font-size: 1.2em;">
-                <a href="userLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Main Content -->
-    <div id="content">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn">
-                    <i class="bi bi-list text-dark"></i>
-                </button>
-                <div class="ms-auto">
-                    <div class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                Welcome, <?php echo htmlspecialchars($firstname); ?>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item text-danger" href="userLogout.php">
-                                    <i class="bi bi-box-arrow-right"></i> Logout</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <?php include '../include/userNav.php'; ?>    
 
         <!-- Orders Table -->
-        <div class="container order-container">
-            <h3 class="mb-4">My Food Orders</h3>
+        <div class="container order-container" style="margin-top: 100px;">
+            <h3 class="mb-4" >My Food Orders</h3>
 
             <?php if ($result->num_rows > 0): ?>
                 <table class="table table-bordered table-striped table-hover">
@@ -156,6 +109,8 @@ $result = $stmt->get_result();
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
+"></script>
+
 </body>
 </html>

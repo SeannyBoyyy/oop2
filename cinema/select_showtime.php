@@ -9,6 +9,15 @@ if (!isset($_SESSION['owner_id']) && $_SESSION['cinema_id']) {
 }
 
 $cinema_id = $_SESSION['cinema_id'];
+$cinema_name = '';
+$query = "SELECT name FROM tbl_cinema WHERE cinema_id = ?";
+$stmt = mysqli_prepare($con, $query);
+mysqli_stmt_bind_param($stmt, "i", $cinema_id);
+mysqli_stmt_execute($stmt);
+$result_cinema = mysqli_stmt_get_result($stmt);
+if ($row = mysqli_fetch_assoc($result_cinema)) {
+    $cinema_name = $row['name'];
+}
 
 // Fetch movies with showtimes
 $showtimeQuery = "SELECT s.showtime_id, s.cinema_id, m.title, s.show_date, s.show_time 
@@ -36,10 +45,10 @@ $showtimeResult = mysqli_query($con, $showtimeQuery);
         <div class="position-sticky">
             <div class="sidebar-header text-center">
                 <i class="bi bi-person-circle display-1 mb-2 text-black"></i>
-                <h3 class="fw-bold"><strong><?= htmlspecialchars($_SESSION['cinema_name'] ?? 'Cinema'); ?></strong></h3>
+                <h3 class="fw-bold"><strong><?= htmlspecialchars($cinema_name); ?></strong></h3>
             </div>
             <ul class="list-unstyled components">
-                <li class="active" style="font-size: 1.1rem;">
+                <li  style="font-size: 1.1rem;">
                     <a href="cinemaOwnerDashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
                 </li>
                 <li style="font-size: 1.1rem;">
@@ -48,7 +57,7 @@ $showtimeResult = mysqli_query($con, $showtimeQuery);
                 <li style="font-size: 1.1rem;">
                     <a href="manage_showtimes.php"><i class="bi bi-ticket"></i> Manage Showtimes</a>
                 </li>
-                <li style="font-size: 1.1rem;">
+                <li class="active" style="font-size: 1.1rem;">
                     <a href="select_showtime.php"><i class="bi bi-clock"></i> Showtimes</a>
                 </li>
                 <li style="font-size: 1.1rem;">
@@ -74,7 +83,7 @@ $showtimeResult = mysqli_query($con, $showtimeQuery);
                     <div class="navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
-                                Welcome, <?= htmlspecialchars($_SESSION['owner_name'] ?? 'Guest'); ?>
+                                Welcome, <?php echo htmlspecialchars($cinema_name); ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php">

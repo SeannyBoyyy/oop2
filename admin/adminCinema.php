@@ -85,7 +85,7 @@ if (!$result_cinemas) {
                         <a href="adminUsers.php"><i class="bi bi-people"></i> Users</a>
                     </li>
                     <li style="font-size: 1.2em;">
-                        <a href="adminLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                        <a class="text-danger" href="adminLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
                     </li>
                 </ul>
             </div>

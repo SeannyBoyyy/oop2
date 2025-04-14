@@ -90,7 +90,7 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
                     <div class="navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
-                                Welcome, <?php echo isset($_SESSION['owner_name']) ? htmlspecialchars($_SESSION['owner_name']) : 'Guest'; ?>
+                                Welcome, <?php echo htmlspecialchars($cinema_name); ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php">
@@ -106,51 +106,55 @@ $movies = mysqli_query($con, "SELECT movie_id, title FROM tbl_movies WHERE cinem
         <div class="container-fluid p-5">
             <h2 class="text-start mb-5 fw-bold fs-1">Manage Showtimes</h2>
             <button class="btn mb-3" data-bs-toggle="modal" data-bs-target="#addShowtimeModal" style="background-color: #ffd700">Add Showtime</button>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Movie</th>
-                        <th>Screen</th>
-                        <th>Total Seats</th>
-                        <th>Price</th>
-                        <th>Show Date</th>
-                        <th>Show Time</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                    <tr>
-                        <td><?= htmlspecialchars($row['movie_title']) ?></td>
-                        <td><?= htmlspecialchars($row['screen_number']) ?></td>
-                        <td><!-- <?= htmlspecialchars($row['total_seats']) ?> --> <a href="manage_cinema.php?showtime_id=<?= htmlspecialchars($row['showtime_id']) ?>" class="btn btn-success btn-sm">View</a></td>
-                        <td><?= htmlspecialchars($row['price']) ?></td>
-                        <td><?= htmlspecialchars($row['show_date']) ?></td>
-                        <td><?= htmlspecialchars($row['show_time']) ?></td>
-                        <td>
-                            <button class="btn btn-warning btn-sm editBtn"
-                                data-id="<?= $row['showtime_id'] ?>"
-                                data-movie-id="<?= $row['movie_id'] ?>"
-                                data-screen="<?= $row['screen_number'] ?>"
-                                data-seats="<?= $row['total_seats'] ?>"
-                                data-price="<?= $row['price'] ?>"
-                                data-date="<?= $row['show_date'] ?>"
-                                data-time="<?= $row['show_time'] ?>"
-                                data-bs-toggle="modal" data-bs-target="#editShowtimeModal">
-                                Edit
-                            </button>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Movie</th>
+                            <th>Screen</th>
+                            <th>Total Seats</th>
+                            <th>Price</th>
+                            <th>Show Date</th>
+                            <th>Show Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['movie_title']) ?></td>
+                            <td><?= htmlspecialchars($row['screen_number']) ?></td>
+                            <td><!-- <?= htmlspecialchars($row['total_seats']) ?> --> <a href="manage_cinema.php?showtime_id=<?= htmlspecialchars($row['showtime_id']) ?>" class="btn btn-success btn-sm">View</a></td>
+                            <td><?= htmlspecialchars($row['price']) ?></td>
+                            <td><?= htmlspecialchars($row['show_date']) ?></td>
+                            <td><?= htmlspecialchars($row['show_time']) ?></td>
+                            <td>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <button class="btn btn-warning btn-sm editBtn"
+                                        data-id="<?= $row['showtime_id'] ?>"
+                                        data-movie-id="<?= $row['movie_id'] ?>"
+                                        data-screen="<?= $row['screen_number'] ?>"
+                                        data-seats="<?= $row['total_seats'] ?>"
+                                        data-price="<?= $row['price'] ?>"
+                                        data-date="<?= $row['show_date'] ?>"
+                                        data-time="<?= $row['show_time'] ?>"
+                                        data-bs-toggle="modal" data-bs-target="#editShowtimeModal">
+                                        Edit
+                                    </button>
 
-                            <!-- Delete Button -->
-                            <a href="process_showtime.php?delete=<?= $row['showtime_id'] ?>" 
-                            onclick="return confirm('Are you sure you want to delete this showtime?')"
-                            class="btn btn-danger btn-sm">
-                                Delete
-                            </a>
-                        </td>
-                    </tr>
-                <?php } ?>
-                </tbody>
-            </table>
+                                    <!-- Delete Button -->
+                                    <a href="process_showtime.php?delete=<?= $row['showtime_id'] ?>" 
+                                    onclick="return confirm('Are you sure you want to delete this showtime?')"
+                                    class="btn btn-danger btn-sm">
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

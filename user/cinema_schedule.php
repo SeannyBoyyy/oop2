@@ -2,7 +2,6 @@
 session_start();
 require '../config.php';
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: userLogin.php");
     exit();
@@ -36,7 +35,6 @@ $cinema = $resultCinema->fetch_assoc();
 if (!$cinema) {
     die("Cinema not found.");
 }
-
 
 $sqlMovies = "SELECT s.showtime_id, m.title, m.poster_url, m.genre, m.rating, m.duration, s.show_date, s.show_time 
                   FROM tbl_showtimes s
@@ -157,8 +155,7 @@ $resultFoodPartners = $stmtFoodPartners->get_result();
             <?php } ?>
         </div>
     </div>
-
-    <div class="container my-5 py-5">
+    <div class="container  py-5" style="margin-bottom: -30px;">
         <div class="section-header mb-4">
             <h2 class="display-5 fw-bold text-warning">Food Partners</h2>
             <p class="text-light lead">Enhance your movie experience with delicious treats from our partners</p>

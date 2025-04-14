@@ -71,7 +71,7 @@ mysqli_stmt_close($stmt);
                         <div class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="ownerDropdown" role="button" data-bs-toggle="dropdown">
-                                    Welcome, <?php echo htmlspecialchars($firstname); ?>
+                                    Welcome, <?php echo htmlspecialchars($cinema_name); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>

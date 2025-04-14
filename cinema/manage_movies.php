@@ -85,7 +85,7 @@ mysqli_stmt_close($stmt);
                         <div class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
-                                    Welcome, <?php  htmlspecialchars($_SESSION['owner_firstname']) ?>
+                                    Welcome, <?php echo htmlspecialchars($cinema_name); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item text-danger" href="adminLogout.php">

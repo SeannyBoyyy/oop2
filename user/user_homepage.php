@@ -100,7 +100,7 @@ $resultCinemas = $con->query($sqlCinemas);
         </div>
         <section class="cinemas-section py-5  bg-black" style="margin-top: -20px; background-color: #121212;">
             <div class="container">
-            <h2 class="display-5 fw-bold text-light mb-5">EXPLORE OUR <span class="text-warning"> CINEMAS</span></h2>
+            <h2 class="display-5 fw-bold text-light mb-5">Explore our <span class="text-warning"> Cinemas</span></h2>
             <div class="row g-4">
             <?php while ($cinema = $resultCinemas->fetch_assoc()) { ?>
             <div class="col-12 col-sm-6 col-lg-4 mb-4">

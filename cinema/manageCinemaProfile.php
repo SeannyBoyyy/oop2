@@ -12,6 +12,17 @@ $owner_id = $_SESSION['owner_id'];
 $success_message = "";
 $error_message = "";
 
+$cinema_id = $_SESSION['cinema_id'];
+$cinema_name = '';
+$query = "SELECT name FROM tbl_cinema WHERE cinema_id = ?";
+$stmt = mysqli_prepare($con, $query);
+mysqli_stmt_bind_param($stmt, "i", $cinema_id);
+mysqli_stmt_execute($stmt);
+$result_cinema = mysqli_stmt_get_result($stmt);
+if ($row = mysqli_fetch_assoc($result_cinema)) {
+    $cinema_name = $row['name'];
+}
+
 // Fetch cinema details
 $sql = "SELECT c.cinema_id, c.name, c.location, c.total_screens, c.status, c.cinema_image, o.owner_firstname, o.owner_lastname 
         FROM tbl_cinema c
@@ -134,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="ownerDropdown" role="button" data-bs-toggle="dropdown">
-                                      Welcome, <?php echo htmlspecialchars($owner_firstname . ' ' . $owner_lastname); ?>
+                                       Welcome, <?php echo htmlspecialchars($cinema_name); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item text-danger" href="cinemaOwnerLogout.php"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
