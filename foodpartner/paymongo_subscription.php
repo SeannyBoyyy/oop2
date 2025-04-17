@@ -4,7 +4,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 $client = new Client();
-$paymongo_secret_key = 'sk_test_rQsjmYK8sbTPT6dcWZk3tBxw'; 
+$paymongo_secret_key = 'YOUR_SECRET_KEY_HERE'; 
 
 if (!isset($_GET['partner_email']) || empty($_GET['partner_email'])) {
     die('Error: Partner email is not set.');
