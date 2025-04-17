@@ -143,7 +143,7 @@ $resultFoodPartners = $stmtFoodPartners->get_result();
                         </div>
                         </div>
                     </div>
-                    <a href="select_showtime_click.php?showtime_id=<?= $movie['showtime_id'] ?>" class="btn btn-primary btn-custom w-100 mt-2">
+                    <a href="select_showtime_click.php?showtime_id=<?= $movie['showtime_id'] ?>" class="btn btn-warning btn-custom w-100 mt-2">
                         <i class="bi bi-ticket-perforated me-2"></i>Book Tickets
                     </a>
                     </div>
@@ -180,21 +180,21 @@ $resultFoodPartners = $stmtFoodPartners->get_result();
                                 
                                 <div class="mb-3">
                                     <p class="card-text text-white-50 mb-2">
-                                        <i class="bi bi-geo-alt-fill me-2 text-primary"></i>
+                                        <i class="bi bi-geo-alt-fill me-2 text-warning"></i>
                                         <?= htmlspecialchars($partner['partner_address']); ?>
                                     </p>
                                     <p class="card-text mb-2">
-                                        <i class="bi bi-person-fill me-2 text-primary"></i>
+                                        <i class="bi bi-person-fill me-2 text-warning"></i>
                                         <?= htmlspecialchars($partner['partner_firstname'] . " " . $partner['partner_lastname']); ?>
                                     </p>
                                     <p class="card-text mb-3">
-                                        <i class="bi bi-envelope-fill me-2 text-primary"></i>
+                                        <i class="bi bi-envelope-fill me-2 text-warning"></i>
                                         <?= htmlspecialchars($partner['partner_email']); ?>
                                     </p>
                                 </div>
                                 
                                 <a href="view_foodproducts.php?partner_id=<?= $partner['partner_id']; ?>&cinema_id=<?= $cinema_id; ?>" 
-                                   class="btn btn-primary btn-custom w-100 mt-2">
+                                   class="btn btn-warning btn-custom w-100 mt-2">
                                     <i class="bi bi-bag-check-fill me-2"></i>Browse Menu
                                 </a>
                             </div>

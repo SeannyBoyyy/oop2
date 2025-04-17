@@ -7,46 +7,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $partner_password = trim($_POST['partner_password']);
     
     if (empty($partner_email) || empty($partner_password)) {
-        die("All fields are required!");
-    }
-
-    $sql = "SELECT partner_id, partner_firstname, partner_password, status, verification_status, subscription_status 
-            FROM tbl_foodpartner WHERE partner_email = ?";
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, "s", $partner_email);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_store_result($stmt);
-
-    if (mysqli_stmt_num_rows($stmt) > 0) {
-        mysqli_stmt_bind_result($stmt, $partner_id, $partner_firstname, $db_password, $status, $verification_status, $subscription_status);
-        mysqli_stmt_fetch($stmt);
-
-        if ($status === 'suspended') {
-            echo "<div class='alert alert-danger text-center'>Your account is suspended. Please contact support.</div>";
-        } else if ($verification_status === 'unverified') {
-            echo "<div class='alert alert-warning text-center'>Please verify your email first.</div>";
-        } else if (password_verify($partner_password, $db_password)) {
-            if ($subscription_status === 'expired' || is_null($subscription_status)) {
-                // 🚀 Redirect to subscription page if not subscribed
-                header("Location: paymongo_subscription.php?partner_email=" . urlencode($partner_email));
-                exit();
-            }
-
-            // ✅ Successful login with an active subscription
-            $_SESSION['partner_id'] = $partner_id;
-            $_SESSION['partner_name'] = $partner_firstname;
-            $_SESSION['user_type'] = 'partner';
-            
-            header("Location: foodPartnerDashboard.php");
-            exit();
-        } else {
-            echo "<div class='alert alert-danger text-center'>Incorrect password!</div>";
-        }
+        $loginError = "All fields are required!";
     } else {
-        echo "<div class='alert alert-danger text-center'>No partner account found!</div>";
-    }
+        $sql = "SELECT partner_id, partner_firstname, partner_password, status, verification_status, subscription_status 
+                FROM tbl_foodpartner WHERE partner_email = ?";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $partner_email);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
 
-    mysqli_stmt_close($stmt);
+        if (mysqli_stmt_num_rows($stmt) > 0) {
+            mysqli_stmt_bind_result($stmt, $partner_id, $partner_firstname, $db_password, $status, $verification_status, $subscription_status);
+            mysqli_stmt_fetch($stmt);
+
+            if ($status === 'suspended') {
+                $loginError = "Your account is suspended. Please contact support.";
+            } else if ($verification_status === 'unverified') {
+                $loginError = "Please verify your email first.";
+            } else if (password_verify($partner_password, $db_password)) {
+                if ($subscription_status === 'expired' || is_null($subscription_status)) {
+                    // Redirect to subscription page if not subscribed
+                    $_SESSION['temp_partner_email'] = $partner_email;
+                    $redirectToSubscription = true;
+                } else {
+                    // Successful login with an active subscription
+                    $_SESSION['partner_id'] = $partner_id;
+                    $_SESSION['partner_name'] = $partner_firstname;
+                    $_SESSION['user_type'] = 'partner';
+                    
+                    $loginSuccess = true;
+                    $successName = $partner_firstname;
+                    $redirectUrl = "foodPartnerDashboard.php";
+                }
+            } else {
+                $loginError = "Incorrect password!";
+            }
+        } else {
+            $loginError = "No partner account found!";
+        }
+
+        mysqli_stmt_close($stmt);
+    }
 }
 ?>
 
@@ -58,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Partner Login | Food Business</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../css/adminLogin.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 </head>
@@ -66,25 +68,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row justify-content-center mt-5">
             <div class="col-md-6 col-lg-4">
                 <div class="text-center mb-4">
-                    <i class="bi bi-person-circle mb-3" style="color: #ffc107; font-size: 5rem;"></i>
+                    <i class="fas fa-utensils mb-3" style="color: #ffc107; font-size: 5rem;"></i>
                     <h4 class="fs-1 fw-bold">Food Partner Login</h4>
                     <p class="text-muted" style="letter-spacing: 1px;">Please enter your email and password to login.</p>
                 </div>
                 <div class="card shadow" style="padding: 20px;">
                     <div class="card-body">
-                        <form action="foodpartnerLogin.php" method="POST">
+                        <form action="foodPartnerLogin.php" method="POST" novalidate>
                             <div class="mb-4">
                                 <label for="partner_email" class="form-label" style="letter-spacing: 2px;">Email</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" class="form-control" name="partner_email" required>
+                                    <span class="input-group-text"><i class="bi bi-envelope-fill" style="color: black;"></i></span>
+                                    <input type="email" class="form-control" id="partner_email" name="partner_email" required>
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
                                 </div>
                             </div>
                             <div class="mb-5">
                                 <label for="partner_password" class="form-label" style="letter-spacing: 2px;">Password</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                    <input type="password" class="form-control" name="partner_password" required>
+                                    <span class="input-group-text"><i class="bi bi-lock-fill" style="color: black;"></i></span>
+                                    <input type="password" class="form-control" id="partner_password" name="partner_password" required>
+                                    <span class="input-group-text">
+                                        <i class="bi bi-eye-fill password-toggle" style="cursor: pointer; color: black;"></i>
+                                    </span>
+                                    <div class="invalid-feedback">Please enter your password.</div>
                                 </div>
                             </div>
                             <div class="d-grid">
@@ -99,6 +106,164 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
+
+    <!-- Login Error Modal -->
+    <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-body p-0">
+                    <div class="mt-3 text-center">
+                        <i class="bi bi-exclamation-circle-fill text-danger" style="font-size: 3.5rem;"></i>
+                        <h4 class="mt-3 mb-0 fw-bold">Login Failed</h4>
+                    </div>
+                    
+                    <div class="p-4 text-center">
+                        <p id="loginErrorMessage" class="fs-5 mb-4">Invalid email or password. Please try again.</p>
+                        <button type="button" class="btn btn-danger px-5 py-2 rounded-pill" data-bs-dismiss="modal">
+                            <i class="bi bi-arrow-counterclockwise me-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Success Modal -->
+    <div class="modal fade" id="loginSuccessModal" tabindex="-1" aria-labelledby="loginSuccessModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-body p-0">
+                    <div class="mt-3 text-center">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 3.5rem;"></i>
+                        <h4 class="mt-3 mb-0 fw-bold">Login Successful</h4>
+                    </div>
+                    
+                    <div class="p-4 text-center">
+                        <p class="fs-5 mb-4">Welcome back, <span id="partnerNameSpan"></span>! You've successfully logged in.</p>
+                        <a href="foodPartnerDashboard.php" class="btn btn-success px-5 py-2 rounded-pill">
+                            <i class="bi bi-arrow-right-circle-fill me-2"></i>Continue to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Required Modal -->
+    <div class="modal fade" id="subscriptionModal" tabindex="-1" aria-labelledby="subscriptionModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-body p-0">
+                    <div class="mt-3 text-center">
+                        <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3.5rem;"></i>
+                        <h4 class="mt-3 mb-0 fw-bold">Subscription Required</h4>
+                    </div>
+                    
+                    <div class="p-4 text-center ">
+                        <p class="fs-5 mb-4">You need an active subscription to access the dashboard.</p>
+                        <a href="paymongo_subscription.php" class="btn btn-warning px-5 py-2 rounded-pill text-black">
+                            <i class="bi bi-credit-card-fill me-2 text-black"></i>Subscribe Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function validateInput(input, force = false) {
+        const errorMessage = input.nextElementSibling;
+        const interacted = input.getAttribute('data-interacted') === 'true' || force;
+        
+        if (interacted) {
+            if (input.validity.valid) {
+                input.classList.remove('is-invalid');
+            } else {
+                input.classList.add('is-invalid');
+            }
+        }
+    }
+
+    window.addEventListener('load', function() {
+        document.querySelectorAll('input').forEach(input => {
+            input.setAttribute('data-interacted', 'false');
+            
+            input.addEventListener('input', function() {
+                this.setAttribute('data-interacted', 'true');
+                validateInput(this);
+            });
+            
+            input.addEventListener('keyup', function() {
+                this.setAttribute('data-interacted', 'true');
+                validateInput(this);
+            });
+            
+            input.addEventListener('blur', function() {
+                this.setAttribute('data-interacted', 'true');
+                validateInput(this);
+            });
+        });
+        
+        document.querySelector('form').addEventListener('submit', (event) => {
+            let formValid = true;
+            
+            document.querySelectorAll('input').forEach(input => {
+                validateInput(input, true);
+                
+                if (!input.validity.valid) {
+                    formValid = false;
+                }
+            });
+
+            if (!formValid) {
+                event.preventDefault();
+            }
+        });
+
+        const togglePassword = document.querySelector('.password-toggle');
+        const passwordInput = document.querySelector('input[name="partner_password"]');
+        
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                this.classList.toggle('bi-eye-fill');
+                this.classList.toggle('bi-eye-slash-fill');
+            });
+        }
+
+        <?php if(isset($loginError)): ?>
+            const loginErrorMessage = document.getElementById('loginErrorMessage');
+            loginErrorMessage.textContent = "<?php echo $loginError; ?>";
+            
+            const loginErrorModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));
+            loginErrorModal.show();
+        <?php endif; ?>
+
+        <?php if(isset($redirectToSubscription) && $redirectToSubscription): ?>
+            const subscriptionModal = new bootstrap.Modal(document.getElementById('subscriptionModal'));
+            subscriptionModal.show();
+            
+            document.querySelector('#subscriptionModal a').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = "paymongo_subscription.php?partner_email=<?php echo urlencode($partner_email); ?>";
+            });
+        <?php endif; ?>
+
+        <?php if(isset($loginSuccess) && $loginSuccess): ?>
+            const partnerNameSpan = document.getElementById('partnerNameSpan');
+            partnerNameSpan.textContent = "<?php echo htmlspecialchars($partner_firstname); ?>";
+            
+            const loginSuccessModal = new bootstrap.Modal(document.getElementById('loginSuccessModal'));
+            loginSuccessModal.show();
+            
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        <?php endif; ?>
+    });
+    </script>
 </body>
 </html>

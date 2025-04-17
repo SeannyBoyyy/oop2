@@ -5,7 +5,8 @@ require '../config.php'; // Include your database connection
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
     header("Location: userLogin.php");
     exit();
-}// Add this query to fetch food partners before the carousel code
+}
+
 $sqlFoodPartners = "SELECT f.*, c.name AS cinema_name 
                     FROM tbl_foodpartner f 
                     JOIN tbl_cinema c ON f.cinema_id = c.cinema_id 
@@ -149,7 +150,7 @@ $resultCinemas = $con->query($sqlCinemas);
                         <img src="../foodpartner/uploads/foodpartner_profiles/<?= htmlspecialchars($partner['image_url']); ?>" 
                              class="card-img-top" style="height: 300px; object-fit: cover;">
                         <div class="position-absolute top-0 end-0 m-3">
-                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">Exclusive</span>
+                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">Partner</span>
                         </div>
                         </div>
                         <div class="card-body text-center p-4">

@@ -36,7 +36,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
         mysqli_stmt_close($update_stmt);
     }
 
-    header("Location: adminVerifyFoodPartner.php");
+    header("Location: adminFoodPartner.php");
     exit();
 }
 
@@ -169,9 +169,9 @@ if (!$result_foodpartners) {
                                     <td><?php echo $row['verification_status']; ?></td>
                                     <td>
                                         <?php if ($row['verification_status'] == 'unverified') { ?>
-                                            <a href="adminVerifyFoodPartner.php?action=verify&id=<?php echo $row['partner_id']; ?>" class="btn btn-success btn-sm">Verify</a>
+                                            <a href="adminFoodPartner.php?action=verify&id=<?php echo $row['partner_id']; ?>" class="btn btn-success btn-sm">Verify</a>
                                         <?php } else { ?>
-                                            <a href="adminVerifyFoodPartner.php?action=unverify&id=<?php echo $row['partner_id']; ?>" class="btn btn-warning btn-sm">Unverify</a>
+                                            <a href="adminFoodPartner.php?action=unverify&id=<?php echo $row['partner_id']; ?>" class="btn btn-warning btn-sm">Unverify</a>
                                         <?php } ?>
                                     </td>
                                 </tr>

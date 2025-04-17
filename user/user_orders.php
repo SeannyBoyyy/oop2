@@ -1,8 +1,8 @@
 <?php
 session_start();
-include '../config.php'; // adjust the path as needed
+include '../config.php'; 
 
-// Check if user is logged in
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: UserLogin.php");
     exit();
@@ -66,49 +66,66 @@ $result = $stmt->get_result();
             <h3 class="mb-4" >My Food Orders</h3>
 
             <?php if ($result->num_rows > 0): ?>
-                <table class="table table-bordered table-striped table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Movie</th>
-                            <th>Cinema</th>
-                            <th>Screen</th>
-                            <th>Seats</th>
-                            <th>Product</th>
-                            <th>Qty</th>
-                            <th>Total Price</th>
-                            <th>Status</th>
-                            <th>Date Ordered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                        <tr>
-                            <td><?= $row['order_id'] ?></td>
-                            <td><?= htmlspecialchars($row['movie_name']) ?></td>
-                            <td><?= htmlspecialchars($row['cinema_name']) ?></td>
-                            <td><?= $row['screen_number'] ?></td>
-                            <td><?= htmlspecialchars($row['seats']) ?></td>
-                            <td><?= htmlspecialchars($row['product_name']) ?></td>
-                            <td><?= $row['quantity'] ?></td>
-                            <td>₱<?= number_format($row['total_price'], 2) ?></td>
-                            <td>
-                                <span class="badge <?= $row['status'] == 'Pending' ? 'bg-warning' : 'bg-success' ?>">
-                                    <?= htmlspecialchars($row['status']) ?>
-                                </span>
-                            </td>
-                            <td><?= date("M d, Y h:i A", strtotime($row['order_date'])) ?></td>
-                        </tr>
-                    <?php endwhile; ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Movie</th>
+                                <th>Cinema</th>
+                                <th>Screen</th>
+                                <th>Seats</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Date Ordered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?= $row['order_id'] ?></td>
+                                <td><?= htmlspecialchars($row['movie_name']) ?></td>
+                                <td><?= htmlspecialchars($row['cinema_name']) ?></td>
+                                <td><?= $row['screen_number'] ?></td>
+                                <td><?= htmlspecialchars($row['seats']) ?></td>
+                                <td><?= htmlspecialchars($row['product_name']) ?></td>
+                                <td><?= $row['quantity'] ?></td>
+                                <td>₱<?= number_format($row['total_price'], 2) ?></td>
+                                <td>
+                                    <span class="badge <?= $row['status'] == 'Pending' ? 'bg-warning' : 'bg-success' ?>">
+                                        <?= htmlspecialchars($row['status']) ?>
+                                    </span>
+                                </td>
+                                <td><?= date("M d, Y h:i A", strtotime($row['order_date'])) ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php else: ?>
                 <div class="alert alert-info">You haven't placed any food orders yet.</div>
             <?php endif; ?>
         </div>
     </div>
 </div>
-
+    <style>
+    .navbar-nav .nav-link {
+        color: white !important;
+    }
+    
+    .navbar-nav .nav-link.active {
+        color: #ffd700 !important;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        color: #ffd700 !important;
+    }
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+    </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js
 "></script>
 
