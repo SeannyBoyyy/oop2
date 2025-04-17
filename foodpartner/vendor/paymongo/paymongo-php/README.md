@@ -5,6 +5,7 @@ PayMongo PHP library provides PHP applications an easy access to the PayMongo AP
 Check [example.php](https://github.com/paymongo/paymongo-php/blob/development/example.php) see usage examples.
 
 ## Pending Todos
+
 - [ ] Unit Tests
 - [ ] Code Cleanup and Improvements
 
@@ -38,9 +39,9 @@ require_once('/path/to/paymongo-php/initialize.php');
 
 The bindings require the following extensions in order to work properly:
 
--   [`curl`](https://secure.php.net/manual/en/book.curl.php)
--   [`json`](https://secure.php.net/manual/en/book.json.php)
--   [`mbstring`](https://www.php.net/manual/en/book.mbstring.php)
+- [`curl`](https://secure.php.net/manual/en/book.curl.php)
+- [`json`](https://secure.php.net/manual/en/book.json.php)
+- [`mbstring`](https://www.php.net/manual/en/book.mbstring.php)
 
 If you use Composer, these dependencies should be handled automatically. If you install manually, you'll want to make sure that the required extensions are available.
 
@@ -49,7 +50,7 @@ If you use Composer, these dependencies should be handled automatically. If you 
 Simple usage looks like:
 
 ```php
-$client = new \Paymongo\PaymongoClient('sk_test_BQokikJOvBiI2HlWgH4b2fQ2');
+$client = new \Paymongo\PaymongoClient('YOUR_SECRET_KEY_HERE');
 $paymentIntent = $client->paymentIntents->create([
     'amount' => 10000,
     'currency' => 'PHP',
@@ -63,7 +64,7 @@ echo $paymentIntent->id;
 
 ```php
 try {
-    $client = new \Paymongo\PaymongoClient('sk_test_BQokikJOvBiI2HlWgH4b2fQ2');
+    $client = new \Paymongo\PaymongoClient('YOUR_SECRET_KEY_HERE');
     $paymentIntent = $client->paymentIntents->create([
         'amount' => 10000,
         'currency' => 'PHP',
