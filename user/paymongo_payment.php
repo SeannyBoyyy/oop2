@@ -6,7 +6,7 @@ use GuzzleHttp\Exception\RequestException;
 include '../config.php';
 session_start();
 
-$paymongo_secret_key = 'YOUR_SECRET_KEY_HERE'; // Replace with your PayMongo secret key
+$paymongo_secret_key = 'sk_test_rQsjmYK8sbTPT6dcWZk3tBxw'; // Replace with your PayMongo secret key
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {

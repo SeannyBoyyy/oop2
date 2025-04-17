@@ -50,7 +50,7 @@ If you use Composer, these dependencies should be handled automatically. If you 
 Simple usage looks like:
 
 ```php
-$client = new \Paymongo\PaymongoClient('YOUR_SECRET_KEY_HERE');
+$client = new \Paymongo\PaymongoClient('sk_test_BQokikJOvBiI2HlWgH4b2fQ2');
 $paymentIntent = $client->paymentIntents->create([
     'amount' => 10000,
     'currency' => 'PHP',
@@ -64,7 +64,7 @@ echo $paymentIntent->id;
 
 ```php
 try {
-    $client = new \Paymongo\PaymongoClient('YOUR_SECRET_KEY_HERE');
+    $client = new \Paymongo\PaymongoClient('sk_test_BQokikJOvBiI2HlWgH4b2fQ2');
     $paymentIntent = $client->paymentIntents->create([
         'amount' => 10000,
         'currency' => 'PHP',
