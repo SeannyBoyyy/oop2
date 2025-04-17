@@ -56,6 +56,9 @@ $result = $con->query($query);
                     <a href="view_orders.php"><i class="bi bi-cart-check"></i> Manage Orders</a>
                 </li>
                 <li style="font-size: 1.1rem;">
+                    <a href="subscription_status.php"><i class="bi bi-star"></i> Subscription Status</a>
+                </li>
+                <li style="font-size: 1.1rem;">
                     <a href="manage_foodpartner_profile.php"><i class="bi bi-person"></i> Profile</a>
                 </li>
                 <li style="font-size: 1.1rem;">

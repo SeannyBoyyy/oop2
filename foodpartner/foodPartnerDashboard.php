@@ -48,6 +48,9 @@ mysqli_stmt_fetch($stmt);
                         <a href="view_orders.php"><i class="bi bi-cart-check"></i> Manage Orders</a>
                     </li>
                     <li style="font-size: 1.1rem;">
+                        <a href="subscription_status.php"><i class="bi bi-star"></i> Subscription Status</a>
+                    </li>
+                    <li style="font-size: 1.1rem;">
                         <a href="manage_foodpartner_profile.php"><i class="bi bi-person"></i> Profile</a>
                     </li>
                     <li style="font-size: 1.1rem;">
@@ -92,6 +95,14 @@ mysqli_stmt_fetch($stmt);
                             <div class="card-body">
                                 <i class="bi bi-cart-check display-1 mb-3"></i>
                                 <h5 class="card-title">Manage Orders</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="subscription_status.php" class="card text-center text-decoration-none text-dark">
+                            <div class="card-body">
+                                <i class="bi bi-star display-1 mb-3"></i>
+                                <h5 class="card-title">Subscription Status</h5>
                             </div>
                         </a>
                     </div>
