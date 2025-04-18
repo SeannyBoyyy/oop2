@@ -64,19 +64,29 @@ foreach ($seats as $seat) {
     $stmt->execute();
 }
 
-// Insert transaction into `tbl_transactions`
+
 $seat_numbers = implode(", ", $seat_list);
 $transaction_date = date("Y-m-d H:i:s");
-$insert_transaction = "INSERT INTO tbl_transactions (user_id, showtime_id, seats, total_price, payment_status, transaction_date)
-                       VALUES (?, ?, ?, ?, 'paid', NOW())";
-$stmt = $con->prepare($insert_transaction);
-$stmt->bind_param("iisd", $user_id, $showtime_id, $seat_numbers, $total_price);
-$stmt->execute();
-$transaction_id = $con->insert_id;
 
-// Generate QR code data
-$qr_data = "TXN:{$transaction_id}|MOVIE:{$movie_title}|DATE:{$showtime['show_date']}|TIME:{$showtime['show_time']}|SEATS:{$seat_numbers}|USER:{$user_id}";
+// Fetch the latest transaction from `tbl_transactions`
+$query = "SELECT transaction_id FROM tbl_transactions 
+          WHERE user_id = ? AND showtime_id = ? AND payment_status = 'paid'
+          ORDER BY transaction_date DESC LIMIT 1";
+$stmt = $con->prepare($query);
+$stmt->bind_param("ii", $user_id, $showtime_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$transaction = $result->fetch_assoc();
+
+if ($transaction) {
+    $transaction_id = $transaction['transaction_id'];
+    // Generate QR code data with the fetched transaction ID
+    $qr_data = "TXN:{$transaction_id}|MOVIE:{$movie_title}|DATE:{$showtime['show_date']}|TIME:{$showtime['show_time']}|SEATS:" . implode(", ", $seat_list) . "|USER:{$user_id}";
+} else {
+    echo "Error: Transaction not found.";
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

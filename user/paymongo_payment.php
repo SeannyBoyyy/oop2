@@ -2,11 +2,17 @@
 require '../foodpartner/vendor/autoload.php'; 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Dotenv\Dotenv;
 
 include '../config.php';
 session_start();
 
-$paymongo_secret_key = 'sk_test_rQsjmYK8sbTPT6dcWZk3tBxw'; // Replace with your PayMongo secret key
+// Load .env
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Get secret key from .env
+$paymongo_secret_key = $_ENV['PAYMONGO_SECRET_KEY'];
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -72,6 +78,17 @@ try {
     $body = json_decode($response->getBody(), true);
 
     if (isset($body['data']['attributes']['checkout_url'])) {
+        // Insert transaction into database after successful payment processing
+        $seats_string = implode(", ", array_map(function($seat) {
+            return $seat['row_label'] . $seat['seat_number'];
+        }, $seats)); // Converts to something like "B2, B3, B4"
+        
+        $insert_transaction = "INSERT INTO tbl_transactions (user_id, showtime_id, seats, total_price, payment_status, transaction_date)
+                               VALUES (?, ?, ?, ?, 'paid', NOW())";
+        $stmt = $con->prepare($insert_transaction);
+        $stmt->bind_param("iiss", $user_id, $showtime_id, $seats_string, $total_price);
+        $stmt->execute();        
+
         header("Location: " . $body['data']['attributes']['checkout_url']);
         exit();
     } else {

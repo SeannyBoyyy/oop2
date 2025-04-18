@@ -1,10 +1,18 @@
 <?php
 require 'vendor/autoload.php'; 
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Dotenv\Dotenv;
+
+// Load .env
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Get secret key from .env
+$paymongo_secret_key = $_ENV['PAYMONGO_SECRET_KEY'];
 
 $client = new Client();
-$paymongo_secret_key = 'sk_test_rQsjmYK8sbTPT6dcWZk3tBxw'; 
 
 if (!isset($_GET['partner_email']) || empty($_GET['partner_email'])) {
     die('Error: Partner email is not set.');

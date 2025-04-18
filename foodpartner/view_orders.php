@@ -111,6 +111,12 @@ $result = $stmt->get_result();
 
            
             <div class="container-fluid p-5">
+                <?php 
+                if (isset($_SESSION['msg'])) {
+                    echo "<div class='alert alert-info text-center'>" . $_SESSION['msg'] . "</div>";
+                    unset($_SESSION['msg']);
+                }                
+                ?>
                 <h2 class="text-start mb-5 fw-bold fs-1">Manage Orders</h2>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
@@ -123,6 +129,7 @@ $result = $stmt->get_result();
                                 <th>Qty</th>
                                 <th>Total Price</th>
                                 <th>Status</th>
+                                <th>Actions</th>
                                 <th>Order Date</th>
                                 
                             </tr>
@@ -147,6 +154,17 @@ $result = $stmt->get_result();
                                             }
                                             ?>
                                             <span class="badge <?php echo $status_class; ?>"><?php echo ucfirst($row['status']); ?></span>
+                                        </td>
+                                        <td>
+                                            <?php if ($row['status'] === 'pending'): ?>
+                                                <form action="update_order_status.php" method="POST" onsubmit="return confirm('Mark this order as completed?');">
+                                                    <input type="hidden" name="order_id" value="<?= $row['order_id'] ?>">
+                                                    <input type="hidden" name="new_status" value="completed">
+                                                    <button type="submit" class="btn btn-success btn-sm">Mark as Completed</button>
+                                                </form>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary">Completed</span>
+                                            <?php endif; ?>
                                         </td>
                                         <td><?php echo date("M d, Y h:i A", strtotime($row['order_date'])); ?></td>
                                     </tr>

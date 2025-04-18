@@ -3,7 +3,7 @@ session_start();
 include '../config.php';
 
 // Check if cinema owner is logged in
-if (!isset($_SESSION['owner_id']) && $_SESSION['cinema_id']) {
+if (!isset($_SESSION['owner_id'])) {
     header("Location: cinemaOwnerLogin.php");
     exit();
 }
@@ -32,6 +32,24 @@ if ($cinema) {
     $cinema_name = "Unknown Cinema"; // Default value if no cinema is found
 }
 $stmt->close();
+
+
+
+$showtime_id = $_GET['showtime_id'] ?? null; // or from POST, depending on your setup
+$hasSeats = false;
+
+if ($showtime_id) {
+    $stmt = $con->prepare("SELECT COUNT(*) FROM tbl_seats WHERE showtime_id = ?");
+    $stmt->bind_param("i", $showtime_id);
+    $stmt->execute();
+    $stmt->bind_result($seatCount);
+    $stmt->fetch();
+    $stmt->close();
+
+    if ($seatCount > 0) {
+        $hasSeats = true; // means seats already exist
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,13 +152,19 @@ $stmt->close();
                                 <input type="number" id="seatsPerRow" name="seatsPerRow" class="form-control" min="1" required>
                             </div>
                         </div>
-
-                        <button type="button" class="btn btn-primary mt-3" onclick="generateSeats()">Generate Seats</button>
+                        
+                        <?php if (!$hasSeats): ?>
+                            <button type="button" class="btn btn-primary mt-3" onclick="generateSeats()">Generate Seats</button>
+                        <?php else: ?>
+                            <div class="alert alert-info mt-3">Seats have already been generated for this showtime.</div>
+                        <?php endif; ?>
                     </form>
 
                 <div id="seatLayout" class="seat-layout-container mt-4"></div>
 
-                <button id="saveSeats" class="btn btn-success mt-3" style="display:none;" onclick="saveSeatLayout()">Save Layout</button>
+                <?php if (!$hasSeats): ?>
+                    <button id="saveSeats" class="btn btn-success mt-3" style="display:none;" onclick="saveSeatLayout()">Save Layout</button>
+                <?php endif; ?>
             </div>
         </div>
     </div>

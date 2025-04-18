@@ -2,12 +2,18 @@
 require '../foodpartner/vendor/autoload.php'; 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Dotenv\Dotenv;
 
 include '../config.php';
 session_start();
 
-// PayMongo Secret Key
-$paymongo_secret_key = 'sk_test_rQsjmYK8sbTPT6dcWZk3tBxw'; // Replace with your PayMongo secret key
+// Load .env
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Get secret key from .env
+$paymongo_secret_key = $_ENV['PAYMONGO_SECRET_KEY'];
+
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -108,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>';
     } else {
-        $total_price_cents = intval($total_price * 100); // Convert to cents
+        $total_price_cents = intval($product['price'] * 100); // Convert to cents
 
         // Fetch user email for billing
         $query = "SELECT user_email FROM tbl_user WHERE user_id = ?";

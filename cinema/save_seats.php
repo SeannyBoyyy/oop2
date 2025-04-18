@@ -3,7 +3,7 @@ session_start();
 include '../config.php';
 
 // Check if cinema owner is logged in
-if (!isset($_SESSION['owner_id']) && $_SESSION['cinema_id']) {
+if (!isset($_SESSION['owner_id'])) {
     header("Location: cinemaOwnerLogin.php");
     exit();
 }

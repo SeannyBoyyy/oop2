@@ -2,6 +2,11 @@
 include '../config.php';
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: userLogin.php");
+    exit();
+}
+
 // Assuming you are already inside the payment success handler
 if (isset($_GET['product_id']) && isset($_GET['showtime_id']) && isset($_GET['quantity']) && isset($_GET['seats'])) {
     $seats = $_GET['seats']; // Get the selected seats (e.g., an array or JSON)

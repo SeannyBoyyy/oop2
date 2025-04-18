@@ -1,5 +1,11 @@
 <?php
 include '../config.php';
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: userLogin.php");
+    exit();
+}
 
 if (isset($_GET['order_id'])) {
     $order_id = $_GET['order_id'];
