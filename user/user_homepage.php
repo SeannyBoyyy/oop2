@@ -2,7 +2,7 @@
 session_start();
 require '../config.php'; // Include your database connection
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'user') {
+if (!isset($_SESSION['user_id'])) {
     header("Location: userLogin.php");
     exit();
 }
@@ -41,6 +41,14 @@ $resultCinemas = $con->query($sqlCinemas);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/userHomepage.css" rel="stylesheet">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#ffcc00">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="../icons/icon-192x192.png">
+    
 </head>
 <body>
 
@@ -270,5 +278,20 @@ $resultCinemas = $con->query($sqlCinemas);
             background-image: linear-gradient(to bottom, #0a0a0a, #111111);
             }
     </style>
+
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/oop2/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered:', registration);
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+            });
+        });
+    }
+    </script>
+
 </body>
 </html>

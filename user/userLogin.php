@@ -50,6 +50,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/adminLogin.css" rel="stylesheet">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#ffcc00">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="../icons/icon-192x192.png">
+
 </head>
 <body class="bg-light">
     <div class="container">
@@ -221,5 +229,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
     });
     </script>
+
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/oop2/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered:', registration);
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+            });
+        });
+    }
+    </script>
+
 </body>
 </html>

@@ -40,7 +40,7 @@ if ($selectedShowtimeId > 0) {
 
 // Redirect if no valid showtime is found
 if (!$selectedShowtime) {
-    echo "<script>alert('Invalid Showtime ID!'); window.location.href='index.php';</script>";
+    echo "<script>alert('Invalid Showtime ID!'); window.location.href='user_homepage.php';</script>";
     exit();
 }
 ?>

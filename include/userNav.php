@@ -32,8 +32,6 @@
                             <?php echo htmlspecialchars($firstname); ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="user_profile.php">My Profile</a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item text-danger d-flex align-items-center" href="userLogout.php">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right me-2" viewBox="0 0 16 16">
